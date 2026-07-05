@@ -16,7 +16,6 @@
     --warn-bg: #FAEEDA; --warn-text: #854F0B;
     --success-bg: #EAF3DE; --success-text: #3B6D11;
     --crit-bg: #FCEBEB; --crit-text: #A32D2D;
-    --p-pre: #A15C9E; --p-preg: #C97A2B; --p-post: #2E8F7A;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -103,10 +102,10 @@
   .post-card.fmt-קרוסל { border-right-color: var(--teal); }
   .post-card.fmt-פוסט-סטטי { border-right-color: var(--coral); }
   .post-card.fmt-סטורי { border-right-color: var(--gray); }
-  .post-card.persona-לפני-היריון { border-right-color: var(--p-pre); }
-  .post-card.persona-הריון { border-right-color: var(--p-preg); }
-  .post-card.persona-אחרי-לידה { border-right-color: var(--p-post); }
-  .post-card.persona-שניהם { border-right-color: var(--gray-dark); }
+  .post-card.category-sale { border-right-color: var(--coral); }
+  .post-card.category-leadmagnet { border-right-color: var(--teal); }
+  .post-card.category-education { border-right-color: var(--purple); }
+  .post-card.category-community { border-right-color: var(--gray-dark); }
 
   .post-main { flex: 1; min-width: 0; }
   .post-topic { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
@@ -1219,7 +1218,22 @@ const MAYA_OFRI_DAY1 = [
 // (CALENDAR_POSTS, עם persona/priority מוזרקים מ-audience) וגם המאגר הפתוח (ORGANIC_POOL).
 // MAYA_OFRI_DAY1 בכוונה לא נכנס לכאן — הוא מוצג רק כתת-כותרת ייעודית בטאב "תסריטים לצילום",
 // לא בלוח השנה/פוסטים אורגניים, כי אלה תסריטי הפקה קונקרטיים ליום צילום ולא רעיונות לשיבוץ עצמאי.
-const LIBRARY_POSTS = CALENDAR_POSTS.map(p => Object.assign({}, p, { persona: p.audience, priority: p.priority || 'high' })).concat(ORGANIC_POOL);
+// קטגוריות תוכן — "תיקיות" לפי מטרת הפוסט (לא לפי פרסונה). נקבע ידנית לפי ה-CTA/goal בפועל.
+const CATEGORIES = [
+  { key: 'sale', label: '💰 קידום מכירה', color: 'var(--coral)', desc: 'מוביל ישירות למכירה בתשלום — RISE Path, Pregnancy Glow Path, CheckMom CLUB, או מדריך בתשלום.' },
+  { key: 'leadmagnet', label: '🎁 ליד מגנט', color: 'var(--teal)', desc: 'מוביל להורדת מדריך חינמי (כמו MomSafe) — חימום לקראת מכירה עתידית, לא מכירה עצמה.' },
+  { key: 'education', label: '🎓 ידע מקצועי וערך', color: 'var(--purple)', desc: 'תוכן חינוכי או הפרכת מיתוסים בלי CTA מוצרי — בונה אוטוריטה ואמון.' },
+  { key: 'community', label: '💜 אמפתיה וקהילה', color: 'var(--gray-dark)', desc: 'תוכן אישי או מאחורי-הקלעים שבונה קרבה וקהילה, בלי הצעת מכירה.' },
+];
+const CATEGORY_BY_ID = {
+  1: 'leadmagnet', 2: 'leadmagnet', 3: 'sale', 4: 'sale', 5: 'education', 6: 'sale', 7: 'sale', 8: 'leadmagnet', 9: 'community', 10: 'community',
+  11: 'education', 12: 'leadmagnet', 13: 'sale', 14: 'sale', 15: 'sale', 16: 'leadmagnet', 17: 'sale', 27: 'sale', 28: 'leadmagnet', 29: 'leadmagnet', 30: 'leadmagnet', 31: 'leadmagnet', 32: 'sale',
+};
+function categoryOf(id) { return CATEGORY_BY_ID[id] || 'education'; }
+function categoryClass(key) { return 'category-' + key; }
+
+const LIBRARY_POSTS = CALENDAR_POSTS.map(p => Object.assign({}, p, { persona: p.audience, priority: p.priority || 'high' })).concat(ORGANIC_POOL)
+  .map(p => Object.assign(p, { category: categoryOf(p.id) }));
 const ALL_EDITABLE_POSTS = LIBRARY_POSTS.concat(MAYA_OFRI_DAY1);
 
 // נקודות הכניסה לתנועה — הקשר עסקי, לא לוח יומן. מוצג כתרשים זרימה בטאב הפאנלים.
@@ -1275,14 +1289,6 @@ const ENTRY_PANELS = [
 ];
 
 const fmtClass = (f) => f.replace(/\s/g, '-');
-const personaClass = (a) => 'persona-' + a.replace(/\s/g, '-');
-const PERSONA_COLOR = { "לפני היריון": "var(--p-pre)", "הריון": "var(--p-preg)", "אחרי לידה": "var(--p-post)", "שניהם": "var(--gray-dark)" };
-const PERSONA_DESC = {
-  "לפני היריון": "לופ ה'הכל או כלום', PCOS, IVF, הכנה להריון — מוביל ל-RISE Path",
-  "הריון": "ניהול ההריון, בטיחות מזון, ותזונה יומיומית — מוביל ל-Pregnancy Glow Path ול-MomSafe/CheckMom",
-  "אחרי לידה": "החזרה לעצמה, הנקה, ירידה במשקל ריאלית — מוביל ל-RISE Path",
-  "שניהם": "תוכן קהילתי/מותגי שרלוונטי לכל הקהל, ללא פרסונה ספציפית",
-};
 
 let activeLibFilter = { format: 'all', persona: 'all' };
 
@@ -1299,7 +1305,7 @@ function priorityBadge(p) {
 function postCardHtml(p, opts) {
   opts = opts || {};
   const fc = fmtClass(p.format);
-  const extraCls = opts.byPersona ? ' ' + personaClass(p.audience) : '';
+  const extraCls = opts.byCategory ? ' ' + categoryClass(p.category) : '';
   return `<div class="post-card fmt-${fc}${extraCls}" onclick="openModal(${p.id})">
     <div class="post-main">
       <div class="post-topic">${p.topic}</div>
@@ -1610,21 +1616,20 @@ function renderScriptsLibrary() {
 }
 function setLibFilter(f) { activeLibFilter.format = f; renderScriptsLibrary(); }
 
-/* ---------- TAB 5: פוסטים אורגניים לפי פרסונה ---------- */
+/* ---------- TAB 5: פוסטים אורגניים לפי תיקיית מטרה ---------- */
 function renderOrganicTab() {
   document.getElementById('organic-cross-note').innerHTML =
-    `💡 כל הפוסטים האורגניים במקום אחד — כולל אלה שכבר משובצים ביומן בטאב "אסטרטגיית תוכן". אפשר לשבץ/לשבץ מחדש אותם בלוח השנה בכל רגע.`;
-  const order = ["לפני היריון", "הריון", "אחרי לידה", "שניהם"];
+    `💡 כל הפוסטים האורגניים במקום אחד, מסודרים לפי המטרה של כל תוכן — כולל אלה שכבר משובצים ביומן בטאב "אסטרטגיית תוכן". אפשר לשבץ/לשבץ מחדש אותם בלוח השנה בכל רגע. הפרסונה (קהל היעד) עדיין מוצגת כתגית על כל כרטיס.`;
   const priorityOrder = { high: 0, medium: 1, low: 2 };
   let html = '';
-  order.forEach(persona => {
-    const items = LIBRARY_POSTS.filter(p => p.audience === persona)
+  CATEGORIES.forEach(cat => {
+    const items = LIBRARY_POSTS.filter(p => p.category === cat.key)
       .sort((a, b) => (priorityOrder[a.priority] ?? 9) - (priorityOrder[b.priority] ?? 9));
     if (items.length === 0) return;
     html += `<div class="persona-section">
-      <div class="persona-head"><span class="persona-dot" style="background:${PERSONA_COLOR[persona]}"></span><span class="persona-title">${persona}</span><span class="badge-count">${items.length} רעיונות</span></div>
-      <div class="persona-desc">${PERSONA_DESC[persona] || ''}</div>
-      <div class="posts-grid">${items.map(p => postCardHtml(p, { byPersona: true })).join('')}</div>
+      <div class="persona-head"><span class="persona-dot" style="background:${cat.color}"></span><span class="persona-title">${cat.label}</span><span class="badge-count">${items.length} פוסטים</span></div>
+      <div class="persona-desc">${cat.desc}</div>
+      <div class="posts-grid">${items.map(p => postCardHtml(p, { byCategory: true })).join('')}</div>
     </div>`;
   });
   document.getElementById('organic-root').innerHTML = html;
