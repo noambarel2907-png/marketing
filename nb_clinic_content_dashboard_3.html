@@ -3,162 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NB Clinic — דשבורד תוכן | שבועיים 30.6–11.7</title>
+<title>NB Clinic — דשבורד תוכן מתוייק</title>
 <style>
   :root {
-    --purple: #7F77DD;
-    --purple-dark: #534AB7;
-    --teal: #1D9E75;
-    --teal-dark: #0F6E56;
-    --coral: #D85A30;
-    --coral-dark: #993C1D;
-    --gray: #888780;
-    --gray-dark: #5F5E5A;
-    --bg-page: #FBF9F6;
-    --bg-card: #FFFFFF;
-    --bg-soft: #F4F2EE;
-    --text-primary: #2C2C2A;
-    --text-secondary: #5F5E5A;
-    --text-muted: #888780;
-    --border: #E5E2DA;
-    --border-strong: #D3D1C7;
-    --warn-bg: #FAEEDA;
-    --warn-text: #854F0B;
-    --success-bg: #EAF3DE;
-    --success-text: #3B6D11;
+    --purple: #7F77DD; --purple-dark: #534AB7;
+    --teal: #1D9E75; --teal-dark: #0F6E56;
+    --coral: #D85A30; --coral-dark: #993C1D;
+    --gray: #888780; --gray-dark: #5F5E5A;
+    --bg-page: #FBF9F6; --bg-card: #FFFFFF; --bg-soft: #F4F2EE;
+    --text-primary: #2C2C2A; --text-secondary: #5F5E5A; --text-muted: #888780;
+    --border: #E5E2DA; --border-strong: #D3D1C7;
+    --warn-bg: #FAEEDA; --warn-text: #854F0B;
+    --success-bg: #EAF3DE; --success-text: #3B6D11;
+    --crit-bg: #FCEBEB; --crit-text: #A32D2D;
+    --p-pre: #A15C9E; --p-preg: #C97A2B; --p-post: #2E8F7A;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background: var(--bg-page);
-    color: var(--text-primary);
-    line-height: 1.6;
-    padding-bottom: 4rem;
+    background: var(--bg-page); color: var(--text-primary); line-height: 1.6; padding-bottom: 4rem;
   }
   .top-bar {
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
-    padding: 1.25rem 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    background: var(--bg-card); border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem; position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   }
   .logo-mark {
-    width: 38px; height: 38px;
-    border-radius: 10px;
+    width: 38px; height: 38px; border-radius: 10px;
     background: linear-gradient(135deg, var(--purple), var(--purple-dark));
     display: flex; align-items: center; justify-content: center;
-    color: white; font-weight: 700; font-size: 16px;
-    flex-shrink: 0;
+    color: white; font-weight: 700; font-size: 16px; flex-shrink: 0;
   }
   .top-title { font-size: 17px; font-weight: 600; }
   .top-sub { font-size: 13px; color: var(--text-muted); }
   .top-meta { margin-right: auto; display: flex; gap: 10px; flex-wrap: wrap; }
-  .pill {
-    font-size: 12px; padding: 5px 12px; border-radius: 20px;
-    background: var(--bg-soft); color: var(--text-secondary);
-    border: 1px solid var(--border);
-  }
+  .pill { font-size: 12px; padding: 5px 12px; border-radius: 20px; background: var(--bg-soft); color: var(--text-secondary); border: 1px solid var(--border); }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 2rem; }
 
   .focus-banner {
     background: linear-gradient(135deg, #EEEDFE, #F4F2EE);
-    border: 1px solid var(--border-strong);
-    border-radius: 16px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-strong); border-radius: 16px;
+    padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
   }
   .focus-banner .icon { font-size: 22px; }
   .focus-banner-text { font-size: 14px; color: var(--text-secondary); }
   .focus-banner-text strong { color: var(--purple-dark); font-weight: 600; }
 
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 2rem;
+  /* tabs */
+  .tabs-nav { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 1.75rem; border-bottom: 1px solid var(--border); }
+  .tab-btn {
+    padding: 11px 18px; font-size: 14px; font-weight: 600; color: var(--text-secondary);
+    background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap;
+    font-family: inherit;
   }
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    text-align: center;
-  }
+  .tab-btn:hover { color: var(--purple-dark); }
+  .tab-btn.active { color: var(--purple-dark); border-bottom-color: var(--purple); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+  .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
   .stat-num { font-size: 28px; font-weight: 700; color: var(--purple-dark); }
   .stat-lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-  .legend-row {
-    display: flex; gap: 18px; flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-    padding: 12px 16px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-  }
+  .legend-row { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 1.5rem; padding: 12px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; }
   .leg { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
   .leg-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
 
-  .controls-row {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-  }
+  .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
   .filter-btn {
-    font-size: 13px;
-    padding: 7px 16px;
-    border-radius: 20px;
-    border: 1px solid var(--border-strong);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all .15s;
+    font-size: 13px; padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border-strong);
+    background: var(--bg-card); color: var(--text-secondary); cursor: pointer; transition: all .15s; font-family: inherit;
   }
   .filter-btn:hover { border-color: var(--purple); color: var(--purple-dark); }
-  .filter-btn.active {
-    background: var(--purple);
-    color: white;
-    border-color: var(--purple);
-  }
+  .filter-btn.active { background: var(--purple); color: white; border-color: var(--purple); }
+
+  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px solid var(--border-strong); display: flex; align-items: center; gap: 10px; }
+  .section-title .badge-count { font-size: 11px; font-weight: 400; background: var(--bg-soft); color: var(--text-muted); padding: 2px 10px; border-radius: 20px; }
+  .section-note { font-size: 12.5px; color: var(--text-muted); background: var(--bg-card); border: 1px dashed var(--border-strong); border-radius: 10px; padding: 10px 14px; margin-bottom: 1.25rem; line-height: 1.6; }
 
   .week-section { margin-bottom: 2.5rem; }
-  .week-title {
-    font-size: 16px; font-weight: 600;
-    margin-bottom: 1rem;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--border-strong);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .week-title .badge-count {
-    font-size: 11px; font-weight: 400;
-    background: var(--bg-soft); color: var(--text-muted);
-    padding: 2px 10px; border-radius: 20px;
-  }
-
   .day-block { margin-bottom: 1rem; }
   .day-block.is-rest { opacity: .55; }
-  .day-header {
-    font-size: 13px; font-weight: 600; color: var(--text-muted);
-    margin-bottom: 8px;
-    display: flex; align-items: center; gap: 8px;
-  }
+  .day-header { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
   .day-header .dot-day { width: 6px; height: 6px; border-radius: 50%; background: var(--border-strong); }
+  .day-header .today-mark { font-size: 10px; font-weight: 700; background: var(--crit-bg); color: var(--crit-text); padding: 1px 8px; border-radius: 20px; }
 
   .posts-grid { display: flex; flex-direction: column; gap: 8px; }
 
   .post-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-right: 4px solid var(--gray);
-    border-radius: 12px;
-    padding: 14px 18px;
-    cursor: pointer;
-    transition: box-shadow .15s, transform .1s;
+    background: var(--bg-card); border: 1px solid var(--border); border-right: 4px solid var(--gray);
+    border-radius: 12px; padding: 14px 18px; cursor: pointer; transition: box-shadow .15s, transform .1s;
     display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
   }
   .post-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.06); transform: translateY(-1px); }
@@ -166,6 +103,10 @@
   .post-card.fmt-קרוסל { border-right-color: var(--teal); }
   .post-card.fmt-פוסט-סטטי { border-right-color: var(--coral); }
   .post-card.fmt-סטורי { border-right-color: var(--gray); }
+  .post-card.persona-לפני-היריון { border-right-color: var(--p-pre); }
+  .post-card.persona-הריון { border-right-color: var(--p-preg); }
+  .post-card.persona-אחרי-לידה { border-right-color: var(--p-post); }
+  .post-card.persona-שניהם { border-right-color: var(--gray-dark); }
 
   .post-main { flex: 1; min-width: 0; }
   .post-topic { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
@@ -179,122 +120,122 @@
   .tag-audience { background: var(--bg-soft); color: var(--text-secondary); border: 1px solid var(--border); }
   .tag-goal { background: var(--success-bg); color: var(--success-text); }
   .tag-new { background: var(--warn-bg); color: var(--warn-text); }
-  .tag-caution { background: #FCEBEB; color: #A32D2D; }
+  .tag-caution { background: var(--crit-bg); color: var(--crit-text); }
+  .tag-priority-high { background: var(--crit-bg); color: var(--crit-text); }
+  .tag-priority-medium { background: var(--warn-bg); color: var(--warn-text); }
+  .tag-priority-low { background: var(--bg-soft); color: var(--text-muted); }
 
   .post-arrow { font-size: 14px; color: var(--text-muted); flex-shrink: 0; padding-top: 2px; }
-
   .empty-slot { font-size: 13px; color: var(--text-muted); padding: 10px 4px; }
 
-  .pool-section {
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 2px dashed var(--border-strong);
-  }
-  .pool-title { font-size: 16px; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+  /* entry panels (tab 1) */
+  .entry-panels-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 2rem; align-items: start; }
+  .entry-panel-card { background: var(--bg-card); border: 1px solid var(--border); border-top: 4px solid var(--purple); border-radius: 14px; padding: 18px 20px; }
+  .entry-panel-card.coral { border-top-color: var(--coral); }
+  .entry-panel-card.teal { border-top-color: var(--teal); }
+  .entry-panel-card h4 { font-size: 14.5px; margin: 8px 0 4px; }
+  .entry-panel-price { font-size: 11px; font-weight: 700; color: var(--purple-dark); background: #EEEDFE; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 4px; }
+  .entry-panel-card.coral .entry-panel-price { color: var(--coral-dark); background: #FAECE7; }
+  .entry-panel-card.teal .entry-panel-price { color: var(--teal-dark); background: #E1F5EE; }
+  .entry-panel-metrics { display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 4px; }
+  .entry-metric { font-size: 11px; background: var(--bg-soft); border-radius: 8px; padding: 4px 8px; }
+  .entry-metric b { font-variant-numeric: tabular-nums; }
 
-  .funnel-stage { margin-bottom: 1.5rem; }
-  .funnel-stage-header {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 10px;
-  }
-  .funnel-stage-title { font-size: 14px; font-weight: 600; }
-  .funnel-stage-num {
-    width: 24px; height: 24px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600; color: white;
-    flex-shrink: 0;
-  }
-  .funnel-stage[data-stage="1"] .funnel-stage-num,
-  .funnel-stage[data-stage="2"] .funnel-stage-num { background: var(--purple); }
+  .flow-diagram { display: flex; flex-direction: column; margin: 8px 0 10px; }
+  .flow-step { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; font-size: 12px; color: var(--text-secondary); text-align: center; line-height: 1.4; }
+  .flow-step.outcome { background: var(--success-bg); color: var(--success-text); font-weight: 600; border-color: var(--success-text); }
+  .flow-arrow { text-align: center; color: var(--text-muted); font-size: 13px; line-height: 1.2; padding: 1px 0; }
+
+  .funnel-stage { margin-bottom: 1.75rem; }
+  .funnel-stage-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .funnel-stage-title { font-size: 14.5px; font-weight: 600; }
+  .funnel-stage-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: white; flex-shrink: 0; }
+  .funnel-stage[data-stage="1"] .funnel-stage-num, .funnel-stage[data-stage="2"] .funnel-stage-num { background: var(--purple); }
   .funnel-stage[data-stage="3"] .funnel-stage-num { background: var(--coral); }
   .funnel-stage[data-stage="4"] .funnel-stage-num { background: #BA7517; }
   .funnel-stage[data-stage="5"] .funnel-stage-num { background: var(--teal); }
 
+  /* persona groups (tab 5) */
+  .persona-section { margin-bottom: 2.25rem; }
+  .persona-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .persona-dot { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
+  .persona-title { font-size: 15.5px; font-weight: 700; }
+  .persona-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+
+  /* tasks (tab 3) */
+  .task-group-title { font-size: 15px; font-weight: 700; margin: 1.75rem 0 .9rem; display: flex; align-items: center; gap: 10px; }
+  .task-group-title:first-child { margin-top: 0; }
+  .task-progress { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .task-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+  .task-row.done { opacity: .5; }
+  .task-row.done .task-label { text-decoration: line-through; }
+  .task-check { width: 19px; height: 19px; flex-shrink: 0; margin-top: 2px; accent-color: var(--purple); cursor: pointer; }
+  .task-body { flex: 1; min-width: 0; cursor: pointer; }
+  .task-label { font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+  .task-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+  .deadline-chip { font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 600; }
+  .deadline-chip.today { background: var(--crit-bg); color: var(--crit-text); }
+  .deadline-chip.overdue { background: var(--warn-bg); color: var(--warn-text); }
+  .deadline-chip.upcoming { background: var(--bg-soft); color: var(--text-secondary); }
+  .deadline-chip.none { background: var(--bg-soft); color: var(--text-muted); }
+
+  .pool-section { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 2px dashed var(--border-strong); }
+  .pool-title { font-size: 16px; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+
+  /* Content calendar (tab 2) + manual tasks (tab 3) */
+  .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem 1.5rem; }
+  .panel-title { font-size: 14.5px; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .cal-nav-btn { background: var(--bg-soft); border: 1px solid var(--border-strong); border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 14px; color: var(--text-secondary); }
+  .cal-nav-btn:hover { border-color: var(--purple); color: var(--purple-dark); }
+  .cal-month-label { font-weight: 600; font-size: 14px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+  .cal-dow { font-size: 11px; color: var(--text-muted); text-align: center; padding-bottom: 4px; }
+  .cal-day { min-height: 78px; border: 1px solid var(--border); border-radius: 10px; padding: 5px; font-size: 11px; background: var(--bg-soft); cursor: pointer; display: flex; flex-direction: column; gap: 3px; transition: box-shadow .15s; }
+  .cal-day:hover { box-shadow: 0 2px 10px rgba(0,0,0,.07); }
+  .cal-day.empty { background: transparent; border: none; cursor: default; }
+  .cal-day.today { border-color: var(--purple); box-shadow: 0 0 0 1px var(--purple) inset; }
+  .cal-day .cal-daynum { font-weight: 600; color: var(--text-secondary); }
+  .cal-chip { border-radius: 6px; padding: 2px 5px; font-size: 10px; line-height: 1.3; color: #fff; background: var(--gray); }
+  .cal-chip.fmt-ריל { background: var(--purple); }
+  .cal-chip.fmt-קרוסל { background: var(--teal); }
+  .cal-chip.fmt-פוסט-סטטי { background: var(--coral); }
+  .cal-chip.fmt-סטורי { background: var(--gray-dark); }
+
+  .task-form { display: flex; flex-wrap: wrap; gap: 8px; }
+  .task-form input[type="text"] { flex: 1; min-width: 160px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 13px; }
+  .task-form select, .task-form input[type="date"] { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 13px; }
+  .task-form button { background: var(--purple); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; cursor: pointer; font-weight: 600; font-family: inherit; }
+  .task-form button:hover { background: var(--purple-dark); }
+  .task-del { cursor: pointer; color: var(--text-muted); font-size: 15px; flex-shrink: 0; padding-top: 2px; }
+  .task-del:hover { color: #A32D2D; }
+
   /* Modal */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(40,38,32,.45);
-    z-index: 100;
-    align-items: center; justify-content: center;
-    padding: 1.5rem;
-  }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(40,38,32,.45); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; }
   .modal-overlay.open { display: flex; }
-  .modal-box {
-    background: var(--bg-card);
-    border-radius: 18px;
-    max-width: 540px; width: 100%;
-    max-height: 85vh; overflow-y: auto;
-    padding: 2rem;
-    position: relative;
-    box-shadow: 0 20px 60px rgba(0,0,0,.2);
-  }
-  .modal-close {
-    position: absolute; top: 16px; left: 18px;
-    cursor: pointer; font-size: 20px; color: var(--text-muted);
-    width: 32px; height: 32px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    transition: background .15s;
-  }
+  .modal-box { background: var(--bg-card); border-radius: 18px; max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 2rem; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+  .modal-close { position: absolute; top: 16px; left: 18px; cursor: pointer; font-size: 20px; color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background .15s; }
   .modal-close:hover { background: var(--bg-soft); }
   .modal-title { font-size: 19px; font-weight: 700; margin: 8px 0 14px; padding-left: 36px; }
   .modal-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
   .modal-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); margin: 16px 0 6px; }
   .modal-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
-  .modal-caution {
-    font-size: 13px; color: #A32D2D; background: #FCEBEB;
-    padding: 12px 14px; border-radius: 10px; margin: 14px 0;
-    line-height: 1.6;
-  }
+  .modal-caution { font-size: 13px; color: var(--crit-text); background: var(--crit-bg); padding: 12px 14px; border-radius: 10px; margin: 14px 0; line-height: 1.6; }
   .modal-cta-text { font-size: 14px; color: var(--text-primary); background: var(--bg-soft); padding: 10px 14px; border-radius: 10px; }
   .modal-source { font-size: 12px; color: var(--text-muted); margin-top: 14px; }
 
-  .script-block {
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin: 8px 0 16px;
-    font-size: 13.5px;
-    line-height: 1.8;
-    white-space: pre-wrap;
-  }
-  .script-label-row {
-    display: flex; align-items: center; justify-content: space-between;
-    margin: 16px 0 6px;
-  }
-  .copy-btn {
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border-strong);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    cursor: pointer;
-  }
+  .script-block { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 8px 0 16px; font-size: 13.5px; line-height: 1.8; white-space: pre-wrap; }
+  .script-label-row { display: flex; align-items: center; justify-content: space-between; margin: 16px 0 6px; }
+  .copy-btn { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; font-family: inherit; }
   .copy-btn:hover { border-color: var(--purple); color: var(--purple-dark); }
   .copy-btn.copied { background: var(--success-bg); color: var(--success-text); border-color: var(--success-text); }
-  .caption-block {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin: 8px 0 16px;
-    font-size: 13.5px;
-    line-height: 1.8;
-    white-space: pre-wrap;
-  }
+  .caption-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 8px 0 16px; font-size: 13.5px; line-height: 1.8; white-space: pre-wrap; }
   .hashtags-line { font-size: 12px; color: var(--purple-dark); margin-top: 8px; }
 
-  footer {
-    max-width: 1100px; margin: 0 auto; padding: 2rem;
-    text-align: center; color: var(--text-muted); font-size: 12px;
-  }
+  footer { max-width: 1180px; margin: 0 auto; padding: 2rem; text-align: center; color: var(--text-muted); font-size: 12px; }
 
   @media (max-width: 640px) {
-    .container { padding: 1.25rem; }
-    .top-bar { padding: 1rem 1.25rem; }
-    .post-card { flex-direction: column; }
+    .container { padding: 1.25rem; } .top-bar { padding: 1rem 1.25rem; } .post-card { flex-direction: column; }
   }
 </style>
 </head>
@@ -303,12 +244,12 @@
 <div class="top-bar">
   <div class="logo-mark">NB</div>
   <div>
-    <div class="top-title">NB Clinic — דשבורד תוכן</div>
-    <div class="top-sub">גאנט שבועיים | 30.6 – 11.7.2026</div>
+    <div class="top-title">NB Clinic — דשבורד תוכן מתוייק</div>
+    <div class="top-sub">מאוגד לפי טאבים | שבועיים 30.6–11.7.2026</div>
   </div>
   <div class="top-meta">
-    <span class="pill">🎯 Pregnancy Glow + RISE</span>
-    <span class="pill">✨ CheckMom Teaser</span>
+    <span class="pill">🎯 PREG · RISE · אחרי לידה</span>
+    <span class="pill">✨ CheckMom CLUB — השקה</span>
   </div>
 </div>
 
@@ -317,39 +258,62 @@
   <div class="focus-banner">
     <span class="icon">💜</span>
     <div class="focus-banner-text">
-      <strong>פוקוס שבועיים:</strong> מילוי ליוויים אישיים (Pregnancy Glow Path + RISE Path) • בניית ציפייה להשקת CheckMom • 5 פוסטים בשבוע, א׳–ה׳
+      <strong>פוקוס נוכחי:</strong> מילוי ליוויים אישיים לאורך כל מעגל הפריון — Pregnancy Glow Path (הריון) · RISE Path (לפני היריון + אחרי לידה) · השקת CheckMom CLUB (ליווי קבוצתי אחרי לידה)
     </div>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-num">11</div><div class="stat-lbl">פוסטים מתוכננים</div></div>
-    <div class="stat-card"><div class="stat-num">5</div><div class="stat-lbl">ריילז</div></div>
-    <div class="stat-card"><div class="stat-num">4</div><div class="stat-lbl">קרוסלים</div></div>
-    <div class="stat-card"><div class="stat-num">2</div><div class="stat-lbl">פוסטים סטטיים</div></div>
+  <div class="tabs-nav" id="tabs-nav"></div>
+
+  <div class="tab-panel active" id="tab-panels">
+    <div id="entry-panels-root"></div>
   </div>
 
-  <div class="legend-row">
-    <span class="leg"><span class="leg-dot" style="background:#7F77DD"></span>ריל</span>
-    <span class="leg"><span class="leg-dot" style="background:#1D9E75"></span>קרוסל</span>
-    <span class="leg"><span class="leg-dot" style="background:#D85A30"></span>פוסט סטטי</span>
-    <span class="leg"><span class="leg-dot" style="background:#888780"></span>סטורי</span>
+  <div class="tab-panel" id="tab-content">
+    <div class="stats-row" id="stats-row"></div>
+    <div class="legend-row">
+      <span class="leg"><span class="leg-dot" style="background:#7F77DD"></span>ריל</span>
+      <span class="leg"><span class="leg-dot" style="background:#1D9E75"></span>קרוסל</span>
+      <span class="leg"><span class="leg-dot" style="background:#D85A30"></span>פוסט סטטי</span>
+      <span class="leg"><span class="leg-dot" style="background:#888780"></span>סטורי</span>
+    </div>
+    <div class="section-title">🗓️ לוח שנה חודשי</div>
+    <div class="panel">
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="shiftMonth(-1)">›</button>
+        <div class="cal-month-label" id="cal-month-label"></div>
+        <button class="cal-nav-btn" onclick="shiftMonth(1)">‹</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <p class="muted" style="font-size:12px;color:var(--text-muted);margin-top:10px;">לחצי על תאריך כדי לשבץ אליו פוסט מתוך "פוסטים אורגניים", או להסיר שיבוץ קיים.</p>
+    </div>
   </div>
 
-  <div class="controls-row" id="filters"></div>
-
-  <div id="gantt-root"></div>
-
-  <div class="pool-section">
-    <div class="pool-title">🚀 משפך השקת CheckMom (5 שבועות)</div>
-    <div id="funnel-root"></div>
+  <div class="tab-panel" id="tab-tasks">
+    <div class="panel" style="margin-bottom:1.5rem;">
+      <div class="panel-title">➕ הוספת משימה אישית</div>
+      <div class="task-form">
+        <input type="text" id="task-title-input" placeholder="משימה חדשה...">
+        <select id="task-urgency-input">
+          <option value="גבוה">דחיפות: גבוה</option>
+          <option value="בינוני" selected>דחיפות: בינוני</option>
+          <option value="נמוך">דחיפות: נמוך</option>
+        </select>
+        <input type="date" id="task-deadline-input">
+        <button onclick="addManualTask()">הוסיפי</button>
+      </div>
+    </div>
+    <div id="tasks-root"></div>
   </div>
 
-  <div class="pool-section">
-    <div class="pool-title">🗂️ מאגר תוכן — לא משובץ (מוכן לשבוע הבא)</div>
-    <div class="posts-grid" id="pool-root"></div>
+  <div class="tab-panel" id="tab-scripts">
+    <div id="maya-ofri-root"></div>
+    <div class="controls-row" id="lib-filters"></div>
+    <div id="scripts-lib-root"></div>
+  </div>
 
-    <div class="pool-title" style="margin-top:2rem;">🌱 רעיונות חדשים — פרסונה 1 (לפני היריון)</div>
-    <div class="posts-grid" id="pool-root-2"></div>
+  <div class="tab-panel" id="tab-organic">
+    <div class="section-note" id="organic-cross-note"></div>
+    <div id="organic-root"></div>
   </div>
 
 </div>
@@ -365,8 +329,15 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="dayModal">
+  <div class="modal-box">
+    <div class="modal-close" onclick="closeDayModal()">✕</div>
+    <div id="day-modal-content"></div>
+  </div>
+</div>
+
 <script>
-const posts = [
+const CALENDAR_POSTS = [
   { id: 1, day: 1, topic: "לא שותה קפה — אז אין לי בעיה עם קפאין?", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "הוק חזק: 'לא שותה קפה = אין בעיה?' — גילוי כמות הקפאין הנסתרת במאצ'ה, זירו, שוקולד ותה. מסתיים ב-CTA להורדת MomSafe.", cta: "שמרי את זה / הורידי MomSafe", source: "רעיון #1 (מקורי)", isNew: false, hasScript: true,
     script: `HOOK (0–3 שניות):
 "לא שותה קפה, אז לקפאין אין לי בעיה." —
@@ -722,210 +693,71 @@ CLOSE + CTA (27–33 שניות):
     hashtags: "#מעגלהפיריון #דיאטנית #NBClinic #אחרילידה #תזונהבהריון" },
 ];
 
-const funnelPosts = [
-  { id: 18, stage: 1, stageLabel: "שלב 1 — מודעות", topic: "הכאוס של ניהול הריון בלי כלי אחד מרכזי", format: "ריל", audience: "הריון", goal: "מודעות", desc: "פותח את המשפך — יוצר תחושת 'יש בעיה' בלי לחשוף שום פרט על המוצר. הוק על ריבוי הכלים (מחברת, אפליקציה, וואטסאפ) שמנהלים את ההריון.", cta: "שמרי את זה",
+// ORGANIC_POOL: רעיונות לצילום עצמי, לא משובצים ליומן. persona = audience.
+// priority: high / medium / low — נקבע לפי רלוונטיות למכירת RISE/Glow עכשיו, מוכנות, וקלות הפקה.
+const ORGANIC_POOL = [
+  { id: 17, persona: "לפני היריון", priority: "high", topic: "לופ ה'הכל או כלום'? האמת על גישה לפני היריון", format: "ריל", audience: "לפני היריון", goal: "אמפתיה + מכירה", desc: "תוכן ליבה לפרסונה 1: הוק על לופ ה'הכל או כלום' (משטר נוקשה → קריסה → בלגן → אשמה). מסביר שאין קשר בין נוקשות לשקט נפשי, ושיש דרך אחרת — גישת 80/20. CTA חזק ל-RISE PATH.", cta: "כתבי לי RISE", source: "תוכן ליבה לפרסונה 1 (מבוקש)", isNew: true,
     script: `HOOK (0–3 שניות):
-"כמה אפליקציות, מחברות ופתקים את משתמשת בהם כדי לעקוב אחרי ההריון שלך?"
+משטר צבאי. קריסה. בלגן. אשמה.
+ושוב מההתחלה. מכיר?
 
 BODY (3–25 שניות):
-רשימת הבדיקות באפליקציה אחת.
-התפריט במחברת אחרת.
-התזכורות בוואטסאפ לעצמך.
-השאלות שאת שואלת בגוגל ב-2 בלילה ונשארות בלי תשובה ברורה.
+הלופ הזה לא קורה כי את חסרת כוח רצון.
+הוא קורה כי "הכל או כלום" הוא מתכון מובנה לכישלון.
 
-זה לא חוסר ארגון שלך. זה פשוט אין כלי אחד שעושה את כל זה ביחד.
+נוקשות יוצרת לחץ. לחץ יוצר קריסה. קריסה יוצרת אשמה.
+ואשמה? מחזירה אותך הישר למשטר הבא.
 
-CLOSE + CTA (25–30 שניות):
-מה אם הכל היה יכול להיות במקום אחד?
-עוקבת? משהו בדרך 👀`,
-    caption: `כמה אפליקציות, מחברות ופתקים את משתמשת בהם כדי לעקוב אחרי ההריון שלך?
+יש דרך אחרת — וזו לא "להרפות מהכל".
+זו גישת 80/20: עקביות שאת באמת יכולה להחזיק,
+לא שלמות שמתפרקת אחרי שבוע.
 
-רשימת הבדיקות באפליקציה אחת. התפריט במחברת אחרת. התזכורות בוואטסאפ לעצמך. השאלות שנשארות בלי תשובה ברורה.
+CLOSE + CTA (25–31 שניות):
+אם את מתכננת היריון, הגוף שלך לא צריך עוד מלחמה.
+הוא צריך יציבות.
+רוצה לצאת מהלופ הזה אחת ולתמיד, לפני שאת נכנסת להריון?
+כתבי לי RISE בתגובות 💜`,
+    caption: `משטר צבאי. קריסה. בלגן. אשמה. ושוב מההתחלה.
+מכיר?
 
-זה לא חוסר ארגון שלך. זה פשוט שאין כלי אחד שעושה את כל זה ביחד.
+הלופ הזה לא קורה כי חסר לך כוח רצון. הוא קורה כי "הכל או כלום" הוא מתכון מובנה לכישלון. נוקשות יוצרת לחץ, לחץ יוצר קריסה, קריסה יוצרת אשמה — והאשמה מחזירה אותך הישר למשטר הבא.
 
-יש לי משהו בדרך. עוד לא יכולה לספר הכל — אבל שמרי את הפוסט הזה 👀
+יש דרך אחרת. לא "להרפות מהכל" — אלא גישת 80/20: עקביות שאת באמת יכולה להחזיק, לא שלמות שמתפרקת אחרי שבוע.
 
-איך את עוקבת אחרי ההריון שלך כרגע? ספרי לי בתגובות`,
-    hashtags: "#תזונהבהריון #מעגלהפיריון #דיאטנית #NBClinic" },
+אם את מתכננת היריון, הגוף שלך לא צריך עוד מלחמה. הוא צריך יציבות.
 
-  { id: 19, stage: 1, stageLabel: "שלב 1 — מודעות", topic: "סטורי שאלה — איך את עוקבת אחרי ההריון שלך?", format: "סטורי", audience: "הריון", goal: "מודעות + מחקר שוק", desc: "Poll אינטראקטיבי שיוצר מעורבות ובמקביל אוסף מידע אמיתי על ההתנהלות הנוכחית של הקהל — קלט יקר ערך להמשך הקמפיין.", cta: "השתתפי בפול",
-    script: `[סטורי — פורמט Poll/Quiz]
+רוצה לצאת מהלופ הזה אחת ולתמיד?
+💜 כתבי לי RISE בתגובות`,
+    hashtags: "#לפניהיריון #הכלאוכלום #אכילהרגשית #דיאטנית #מעגלהפיריון #NBClinic" },
 
-כותרת עליונה:
-"איך את עוקבת אחרי ההריון שלך כרגע?"
+  { id: 27, persona: "לפני היריון", priority: "high", topic: "מי התוסף הכי מועדף על המדף? (פותח סדרה)", format: "ריל", audience: "לפני היריון", goal: "אוטוריטה + הובלה לסדרה", desc: "פרק פתיחה לסדרת התוספים לפוריות (אומגה 3 / Q10 / אינוזיטול / ויטמין D שכבר כתובים למטה). יוצר ציפייה ומסביר שאין תוסף-קסם אחד — תלוי במצב הספציפי.", cta: "עקבי אחריי • כתבי לי RISE", source: "רעיון חדש (מבוקש)", isNew: true,
+    script: `HOOK (0–3 שניות):
+"אם היית יכולה לבחור רק תוסף אחד לפני שאת מתחילה לנסות להיכנס להריון — איזה היית בוחרת?"
 
-אפשרויות (Poll עם 3-4 כפתורים):
-📓 מחברת / פתקים
-📱 כמה אפליקציות ביחד
-😵‍💫 כלום, פשוט מתוחה כל הזמן
-🤷‍♀️ משהו אחר
+BODY (3–24 שניות):
+בשבועות הקרובים אני עוברת יחד איתך על 4 תוספים שכל אחד מהם נבדק במחקר בהקשר של פוריות:
+אומגה 3 — לאיכות עוברים ושיעורי הפריה.
+Q10 — לעמידות לאינסולין ו-PCOS.
+אינוזיטול — לביוץ סדיר.
+ויטמין D — לסיכויי הריון.
 
-[סטורי המשך לאחר תוצאות]:
-"וואו, [X%] מכן השתמשו בכמה כלים ביחד. בדיוק בשביל זה אני בונה משהו 👀"`,
-    caption: null, hashtags: null },
+אין "תוסף קסם" אחד שמתאים לכולן. מה שמתאים לך תלוי במה שאת מתמודדת איתו.
 
-  { id: 20, stage: 2, stageLabel: "שלב 2 — עניין", topic: "קרוסל Peek Inside — מה יש בפנים?", format: "קרוסל", audience: "הריון", goal: "עניין", desc: "6 שקפים שנותנים הצצה ראשונה לדשבורד, ספריית הידע, והתזכורות — בלי לחשוף תמחור או תאריך השקה מדויק. יוצר סקרנות מבוקרת.", cta: "שמרי • עקבי אחרינו",
-    script: `שקף 1 (פתיחה):
-רציתם הצצה? הנה קצת ממה שבדרך.
+CLOSE + CTA (24–30 שניות):
+עקבי אחריי בשבועות הקרובים — נעבור על כל אחד לעומק.
+ואם את רוצה תשובה ממוקדת למצב שלך כבר עכשיו, כתבי לי RISE בתגובות 💜`,
+    caption: `אם היית יכולה לבחור רק תוסף אחד לפני שאת מתחילה לנסות להיכנס להריון — איזה היית בוחרת?
 
-שקף 2:
-דשבורד אחד. מקום אחד.
-מעקבים, פענוח בדיקות, תפריט מותאם, הכל יחד.
+בשבועות הקרובים אני עוברת איתך על 4 תוספים שנבדקו במחקר בהקשר של פוריות: אומגה 3, Q10, אינוזיטול וויטמין D.
 
-שקף 3:
-ספריית ידע שתמיד איתך.
-תוספי תזונה, בטיחות מזון, מה לעשות עם בחילות וצרבות — בלי לחפש בגוגל.
+אין תוסף קסם אחד שמתאים לכולן — מה שנכון בשבילך תלוי במה שאת מתמודדת איתו (IVF, PCOS, או פשוט הכנה כללית).
 
-שקף 4:
-תזכורות שבאמת עוזרות.
-לא עוד אפליקציה ששוכחת ממנה — משהו שמלווה אותך לאורך הדרך.
+עקבי אחריי כדי לא לפספס אף אחד מהם.
+רוצה תשובה ממוקדת למצב שלך כבר עכשיו?
+💜 כתבי לי RISE בתגובות`,
+    hashtags: "#פוריות #תוספיתזונה #לפניהיריון #דיאטנית #מעגלהפיריון #fertility #NBClinic" },
 
-שקף 5:
-זה לא עוד אפליקציה גנרית.
-זה נבנה מתוך הקליניקה, מתוך מה שראיתי שבאמת חסר.
-
-שקף 6 (CTA):
-זה עוד לא כאן — אבל זה קרוב.
-עקבי אחרינו כדי לא לפספס 💜`,
-    caption: `רציתן הצצה? הנה קצת ממה שבדרך.
-
-דשבורד אחד שמרכז הכל — מעקבים, פענוח בדיקות, תפריט מותאם אישית. ספריית ידע שתמיד איתך, במקום לחפש תשובות בגוגל ב-2 בלילה. תזכורות שבאמת עוזרות, לא עוד אפליקציה ששוכחים ממנה.
-
-זה לא עוד אפליקציה גנרית — זה נבנה מתוך הקליניקה, מתוך מה שראיתי שוב ושוב שחסר לנשים בהריון.
-
-זה עוד לא כאן. אבל זה קרוב.
-
-עקבי אחרינו כדי לא לפספס 💜`,
-    hashtags: "#CheckMom #תזונהבהריון #מעגלהפיריון #דיאטנית #NBClinic" },
-
-  { id: 21, stage: 2, stageLabel: "שלב 2 — עניין", topic: "סטורי מאחורי הקלעים — בונה את CheckMom", format: "סטורי", audience: "הריון", goal: "עניין + אותנטיות", desc: "תמונות עבודה אמיתיות (לא מבוימות) שמראות את התהליך מבפנים — בונה אמון וקרבה לפני ההשקה.", cta: "שתפי דעה",
-    script: `[סטורי 1]:
-תמונה: מסך מחשב מטושטש חלקית, נועם עובדת
-טקסט: "עוד לא יכולה להראות הכל, אבל זה קרוב 👀"
-
-[סטורי 2 — Q&A]:
-"מה הייתן רוצות שיהיה באפליקציה כזו? אשמח לשמוע 💜"
-[תיבת שאלות פתוחה]
-
-[סטורי 3 — מענה לתגובות]:
-תגובה לשתיים-שלוש תשובות שהתקבלו, עם תגובה אישית של נועם`,
-    caption: null, hashtags: null },
-
-  { id: 22, stage: 3, stageLabel: "שלב 3 — רצון", topic: "למה בניתי את זה — הסיפור האישי", format: "ריל", audience: "הריון", goal: "רצון + רשימת המתנה", desc: "ריל אישי וחושפני שמספר את הסיפור מאחורי CheckMom — הרגע שנועם החליטה לבנות פתרון. פותח רשמית את רשימת ההמתנה.", cta: "הצטרפי לרשימת ההמתנה",
-    script: `HOOK (0–4 שניות):
-"אחרי שנים בקליניקה, ראיתי את אותה תמונה שוב ושוב."
-
-BODY (4–26 שניות):
-נשים מוצפות. מבולבלות. עם 5 אפליקציות פתוחות וטאב גוגל נוסף.
-שואלות אותי שאלות שהן כבר "בטח שאלו" איפשהו — כי לא היה להן איפה לקבל תשובה אחת מרוכזת ואמינה.
-
-ראיתי כמה מהפחד והבלבול האלה נובעים פשוט מחוסר במקום אחד שאפשר לסמוך עליו.
-
-אז התחלתי לבנות אותו.
-
-CLOSE + CTA (26–32 שניות):
-זה נקרא CheckMom, וזה כמעט כאן.
-רוצה להיות הראשונה לדעת, ולקבל הטבת השקה?
-הצטרפי לרשימת ההמתנה — הלינק בביו 💜`,
-    caption: `אחרי שנים בקליניקה, ראיתי את אותה תמונה שוב ושוב.
-
-נשים מוצפות. מבולבלות. עם חמש אפליקציות פתוחות וטאב גוגל נוסף, מחפשות תשובה לשאלה שמרגישה "בטח כבר נשאלה" — אבל אין להן איפה לקבל אותה במקום אחד אמין.
-
-ראיתי כמה מהפחד והבלבול הזה פשוט נובע מחוסר במקום מרוכז שאפשר לסמוך עליו.
-
-אז התחלתי לבנות אותו.
-
-זה נקרא CheckMom, וזה כמעט כאן.
-
-רוצה להיות הראשונה לדעת, ולקבל הטבת השקה מיוחדת?
-💜 הצטרפי לרשימת ההמתנה — הלינק בביו`,
-    hashtags: "#CheckMom #תזונהבהריון #מעגלהפיריון #דיאטנית #NBClinic" },
-
-  { id: 23, stage: 3, stageLabel: "שלב 3 — רצון", topic: "פתיחת רשימת המתנה רשמית", format: "פוסט סטטי", audience: "הריון", goal: "רצון + ליד", desc: "פוסט הכרזה ממוקד שמודיע רשמית על פתיחת רשימת ההמתנה ל-CheckMom, עם הדגשת הטבת Early Bird. נשאר כללי לגבי מסלולים (לא מפרט פרימיום).", cta: "הצטרפי לרשימת ההמתנה",
-    script: `[פוסט סטטי — עיצוב נקי, כותרת מרכזית]
-
-כותרת:
-רשימת ההמתנה ל-CheckMom פתוחה 🤍
-
-טקסט משני:
-תיק ההיריון הדיגיטלי שבניתי בשבילך — בקרוב כאן.
-הצטרפי עכשיו ותהיי הראשונה לדעת, עם הטבת השקה מיוחדת.
-
-[בתמונה: עיצוב נקי עם הלוגו/שם CheckMom, ללא פירוט מסלולים]`,
-    caption: `רשימת ההמתנה ל-CheckMom פתוחה 🤍
-
-תיק ההיריון הדיגיטלי שבניתי בשבילך — דשבורד חכם, ספריית ידע, ותזכורות שבאמת עוזרות. הכל במקום אחד.
-
-הצטרפי עכשיו לרשימת ההמתנה ותהיי הראשונה לדעת כשזה יוצא — וגם תקבלי הטבת השקה מיוחדת שלא תחזור.
-
-הלינק בביו 💜`,
-    hashtags: "#CheckMom #תזונהבהריון #מעגלהפיריון #דיאטנית #NBClinic" },
-
-  { id: 24, stage: 4, stageLabel: "שלב 4 — פעולה (יום השקה)", topic: "פוסט הכרזה רשמי — CheckMom כאן", format: "פוסט סטטי", audience: "הריון", goal: "המרה", desc: "פוסט ההשקה הרשמי. עיצוב נקי, תיאור כללי (ללא פירוט מסלולים כפי שהוחלט), CTA ברור לרכישה/הרשמה. ליבת שלב הפעולה.", cta: "לינק בביו — CheckMom כאן",
-    script: `[פוסט סטטי — עיצוב הכרזה, רגע השיא]
-
-כותרת:
-CheckMom כאן 🤍
-
-טקסט משני:
-תיק ההיריון הדיגיטלי שמרכז בשבילך הכל — דשבורד חכם, ספריית ידע, ותמיכה לאורך כל הדרך.
-זמין עכשיו, עם מסלולים שמתאימים לכל שלב ולכל צורך.
-
-[בתמונה: רגע ההשקה, עיצוב חגיגי אך נקי, לא עמוס]`,
-    caption: `CheckMom כאן 🤍
-
-אחרי חודשים של עבודה, התיק ההיריון הדיגיטלי שלך מוכן.
-דשבורד חכם שמרכז את כל המעקבים שלך. ספריית ידע שעונה על השאלות לפני שהן הופכות לחרדה. תמיכה אמיתית, לא עוד אפליקציה גנרית.
-
-זמין עכשיו, עם מסלולים שמתאימים לכל שלב ולכל צורך.
-
-מי שברשימת ההמתנה — בדקי את הסטורי להטבת ההשקה שלך 👀
-
-הלינק בביו, חכי לי שם 💜`,
-    hashtags: "#CheckMom #תזונהבהריון #מעגלהפיריון #דיאטנית #NBClinic #השקה" },
-
-  { id: 25, stage: 4, stageLabel: "שלב 4 — פעולה (יום השקה)", topic: "סטורי Countdown + הטבת Early Bird", format: "סטורי", audience: "הריון", goal: "המרה", desc: "רצף סטוריז ביום שלפני ועד יום ההשקה עצמו, עם טיימר countdown ויצירת דחיפות דרך הטבת זמן מוגבל לרשימת ההמתנה.", cta: "מימוש הטבה — לינק בביו",
-    script: `[סטורי - יום לפני ההשקה]:
-טקסט: "מחר. 🤍"
-[מדבקת Countdown לזמן ההשקה]
-
-[סטורי - בוקר ההשקה]:
-טקסט: "זה היום. CheckMom פה."
-[מדבקת קישור לפוסט ההכרזה]
-
-[סטורי - להטבת Early Bird]:
-טקסט: "ברשימת ההמתנה? יש לך הטבה שמחכה לך — ל-48 שעות בלבד."
-[כפתור CTA לקישור]
-
-[סטורי תזכורת - יום למחרת]:
-טקסט: "עוד 24 שעות להטבת ההשקה. אל תפספסי."`,
-    caption: null, hashtags: null },
-
-  { id: 26, stage: 5, stageLabel: "שלב 5 — ריטרגטינג", topic: "Testimonials מהמשתמשות הראשונות", format: "קרוסל", audience: "הריון", goal: "ריטרגטינג + אמון", desc: "תגובות אמיתיות (לא מבוימות) מהנשים הראשונות שהשתמשו ב-CheckMom. בונה אמון חברתי למי שהתלבטה בזמן ההשקה ולא קנתה עדיין.", cta: "הצטרפי עכשיו",
-    script: `שקף 1 (פתיחה):
-מה אומרות הנשים הראשונות שכבר משתמשות ב-CheckMom?
-
-שקף 2-4:
-[ציטוטים אמיתיים מנשים שהשתמשו — ייאספו בפועל אחרי ההשקה. דוגמת מבנה:]
-"סוף סוף הפסקתי לחפש תשובות בגוגל באמצע הלילה."
-— [שם פרטי], שבוע 24 להריון
-
-שקף 5 (CTA):
-עוד לא הצטרפת? עדיין אפשר.
-הלינק בביו 💜`,
-    caption: `מה אומרות הנשים הראשונות שכבר משתמשות ב-CheckMom?
-
-[כאן ייכנסו ציטוטים אמיתיים מהמשתמשות הראשונות לאחר איסוף בפועל]
-
-אם עוד התלבטת — אולי זה הרגע לנסות.
-
-הלינק בביו 💜`,
-    hashtags: "#CheckMom #תזונהבהריון #מעגלהפיריון #דיאטנית #NBClinic" },
-];
-
-const poolPosts = [
-  { id: 13, day: null, topic: "אומגה 3 כתוסף אפקטיבי במסגרת טיפולי פוריות", format: "ריל", audience: "לפני היריון", goal: "אוטוריטה + ליד", desc: "הוק: 'תוסף אחד שכדאי להכיר אם את בטיפולי פוריות.' מסביר את הקשר בין אומגה 3 לאיכות עוברים ושיעורי הפריה ב-IVF, מבוסס מטא-אנליזות עדכניות. מסיים בהמלצה לבדוק עם הצוות המטפל ו/או הזמנה ל-RISE.", cta: "כתבי לי RISE / שמרי את זה", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
+  { id: 13, persona: "לפני היריון", priority: "medium", topic: "אומגה 3 כתוסף אפקטיבי במסגרת טיפולי פוריות", format: "ריל", audience: "לפני היריון", goal: "אוטוריטה + ליד", desc: "הוק: 'תוסף אחד שכדאי להכיר אם את בטיפולי פוריות.' מסביר את הקשר בין אומגה 3 לאיכות עוברים ושיעורי הפריה ב-IVF, מבוסס מטא-אנליזות עדכניות.", cta: "כתבי לי RISE / שמרי את זה", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
     script: `HOOK (0–3 שניות):
 תוסף אחד שכדאי להכיר אם את בתהליך טיפולי פוריות.
 לא קסם — אבל יש לו גיבוי מחקרי רציני.
@@ -958,7 +790,7 @@ CLOSE + CTA (26–32 שניות):
 💜 כתבי לי RISE בתגובות`,
     hashtags: "#טיפוליפוריות #IVF #אומגה3 #דיאטנית #מעגלהפיריון #fertility #NBClinic" },
 
-  { id: 14, day: null, topic: "תוסף Q10 כחלק מטיפול בתסמונת השחלות הפוליציסטיות", format: "ריל", audience: "לפני היריון", goal: "אוטוריטה + ליד", desc: "הוק: 'PCOS ועמידות לאינסולין? יש תוסף שנבדק במיוחד בשבילך.' מסביר את ההשפעה של Q10 על עמידות לאינסולין, ביוץ וסיכויי הריון לפי מחקרים קליניים, כולל מינון יעד כללי. CTA לRISE.", cta: "כתבי לי RISE", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
+  { id: 14, persona: "לפני היריון", priority: "medium", topic: "תוסף Q10 כחלק מטיפול בתסמונת השחלות הפוליציסטיות", format: "ריל", audience: "לפני היריון", goal: "אוטוריטה + ליד", desc: "הוק: 'PCOS ועמידות לאינסולין? יש תוסף שנבדק במיוחד בשבילך.' מסביר את ההשפעה של Q10 על עמידות לאינסולין, ביוץ וסיכויי הריון לפי מחקרים קליניים, כולל מינון יעד כללי.", cta: "כתבי לי RISE", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
     script: `HOOK (0–3 שניות):
 יש לך PCOS ועמידות לאינסולין?
 יש תוסף אחד שנבדק במיוחד בשבילך — Q10.
@@ -991,7 +823,7 @@ Q10 הוא נוגד חמצון שמגן על המיטוכונדריה בתאים
 💜 כתבי לי RISE בתגובות`,
     hashtags: "#PCOS #שחלותפוליציסטיות #Q10 #דיאטנית #מעגלהפיריון #fertility #NBClinic" },
 
-  { id: 15, day: null, topic: "אינוזיטול ב-PCOS — מה המחקר אומר באמת", format: "קרוסל", audience: "לפני היריון", goal: "ערך + אוטוריטה", desc: "5 שקפים: מסביר מה זה אינוזיטול (Myo-inositol), הקשר לעמידות אינסולין ב-PCOS, מה המחקרים מראים על שיפור ביוץ ואיכות ביציות, ומדוע ההשפעה משתנה בין נשים. טון מאוזן — לא הבטחות, מציג את התמונה האמיתית.", cta: "שמרי • כתבי לי RISE", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
+  { id: 15, persona: "לפני היריון", priority: "medium", topic: "אינוזיטול ב-PCOS — מה המחקר אומר באמת", format: "קרוסל", audience: "לפני היריון", goal: "ערך + אוטוריטה", desc: "5 שקפים: מסביר מה זה אינוזיטול (Myo-inositol), הקשר לעמידות אינסולין ב-PCOS, מה המחקרים מראים על שיפור ביוץ ואיכות ביציות, ומדוע ההשפעה משתנה בין נשים.", cta: "שמרי • כתבי לי RISE", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
     script: `שקף 1 (פתיחה):
 אינוזיטול — שמעת את השם, אבל מה הוא באמת עושה?
 בואי נפרק את זה לפי המחקר.
@@ -1031,7 +863,7 @@ Q10 הוא נוגד חמצון שמגן על המיטוכונדריה בתאים
 💜 כתבי לי RISE בתגובות`,
     hashtags: "#PCOS #אינוזיטול #שחלותפוליציסטיות #דיאטנית #מעגלהפיריון #NBClinic" },
 
-  { id: 16, day: null, topic: "ויטמין D ופוריות — הקשר שלא מדברים עליו מספיק", format: "ריל", audience: "לפני היריון", goal: "אוטוריטה + ליד", desc: "הוק: 'בדקת פעם רמת ויטמין D לפני שניסית להיכנס להיריון?' מסביר את הקשר בין מחסור בויטמין D לסיכויי ביוץ, הריון והצלחת IVF, במיוחד אצל נשים עם PCOS. CTA לבדיקת רמות + MomSafe.", cta: "בדקי רמות • הורידי MomSafe", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
+  { id: 16, persona: "לפני היריון", priority: "medium", topic: "ויטמין D ופוריות — הקשר שלא מדברים עליו מספיק", format: "ריל", audience: "לפני היריון", goal: "אוטוריטה + ליד", desc: "הוק: 'בדקת פעם רמת ויטמין D לפני שניסית להיכנס להיריון?' מסביר את הקשר בין מחסור בויטמין D לסיכויי ביוץ, הריון והצלחת IVF, במיוחד אצל נשים עם PCOS. CTA לבדיקת רמות + MomSafe.", cta: "בדקי רמות • הורידי MomSafe", source: "רעיון פרסונה 1 (מבוקש)", isNew: true,
     script: `HOOK (0–3 שניות):
 בדקת פעם רמת ויטמין D לפני שניסית להיכנס להיריון?
 רוב הנשים — לא. וזה יכול לשנות הרבה.
@@ -1068,41 +900,7 @@ CLOSE + CTA (26–32 שניות):
 💜 הורידי את MomSafe — המדריך החינמי שלי. הלינק בביו`,
     hashtags: "#פוריות #ויטמיןD #טיפוליפוריות #דיאטנית #מעגלהפיריון #fertility #NBClinic" },
 
-  { id: 17, day: null, topic: "לופ ה'הכל או כלום'? האמת על גישה לפני היריון", format: "ריל", audience: "לפני היריון", goal: "אמפתיה + מכירה", desc: "תוכן ליבה לפרסונה 1: הוק על לופ ה'הכל או כלום' (משטר נוקשה → קריסה → בלגן → אשמה). מסביר שאין קשר בין נוקשות לשקט נפשי, ושיש דרך אחרת — גישת 80/20. CTA חזק ל-RISE PATH, ייעוד מובהק לתחילת מעגל הפיריון.", cta: "כתבי לי RISE", source: "תוכן ליבה לפרסונה 1 (מבוקש)", isNew: true,
-    script: `HOOK (0–3 שניות):
-משטר צבאי. קריסה. בלגן. אשמה.
-ושוב מההתחלה. מכיר?
-
-BODY (3–25 שניות):
-הלופ הזה לא קורה כי את חסרת כוח רצון.
-הוא קורה כי "הכל או כלום" הוא מתכון מובנה לכישלון.
-
-נוקשות יוצרת לחץ. לחץ יוצר קריסה. קריסה יוצרת אשמה.
-ואשמה? מחזירה אותך הישר למשטר הבא.
-
-יש דרך אחרת — וזו לא "להרפות מהכל".
-זו גישת 80/20: עקביות שאת באמת יכולה להחזיק,
-לא שלמות שמתפרקת אחרי שבוע.
-
-CLOSE + CTA (25–31 שניות):
-אם את מתכננת היריון, הגוף שלך לא צריך עוד מלחמה.
-הוא צריך יציבות.
-רוצה לצאת מהלופ הזה אחת ולתמיד, לפני שאת נכנסת להריון?
-כתבי לי RISE בתגובות 💜`,
-    caption: `משטר צבאי. קריסה. בלגן. אשמה. ושוב מההתחלה.
-מכיר?
-
-הלופ הזה לא קורה כי חסר לך כוח רצון. הוא קורה כי "הכל או כלום" הוא מתכון מובנה לכישלון. נוקשות יוצרת לחץ, לחץ יוצר קריסה, קריסה יוצרת אשמה — והאשמה מחזירה אותך הישר למשטר הבא.
-
-יש דרך אחרת. לא "להרפות מהכל" — אלא גישת 80/20: עקביות שאת באמת יכולה להחזיק, לא שלמות שמתפרקת אחרי שבוע.
-
-אם את מתכננת היריון, הגוף שלך לא צריך עוד מלחמה. הוא צריך יציבות.
-
-רוצה לצאת מהלופ הזה אחת ולתמיד?
-💜 כתבי לי RISE בתגובות`,
-    hashtags: "#לפניהיריון #הכלאוכלום #אכילהרגשית #דיאטנית #מעגלהפיריון #NBClinic" },
-  { id: 11, topic: "ההנחיות לעלייה במשקל בהריון — מה באמת חדש ב-2026?", format: "פוסט סטטי", audience: "הריון", goal: "אוטוריטה", desc: "⚠️ בדיקה עדכנית (יוני 2026): אין כרגע הנחיה רשמית וסופית חדשה מ-ACOG/CDC לעלייה במשקל בהריון. התקן הקיים עדיין מבוסס על IOM 2009 (לפי BMI התחלתי). מה שיש בפועל: בינואר 2026 התקיים workshop של National Academies (בשיתוף CDC) שדן באפשרות לעדכן את ההנחיה — אך טרם פורסמה החלטה רשמית.", cta: "—", source: "רעיון #3 (חדש)", isNew: true, caution: "דורש ניסוח זהיר. מומלץ למסגר כ'מה ההנחיות הקיימות אומרות ולמה הן נבדקות מחדש' ולא כ'מה השתנה ב-2026' — כדי לשמור על דיוק עובדתי.", script: null, caption: null, hashtags: null },
-  { id: 12, topic: "טוקסופלסמה, אוכל בחוץ וירקות — מה הקשר?", format: "ריל", audience: "הריון", goal: "ליד מגנט", desc: "הוק: 'ידעת שהסיכון לטוקסו לא רק מבשר?' — מסביר את הקשר המפתיע בין אכילה בחוץ, ירקות לא שטופים כראוי, וזיהום בטוקסופלסמה. מסתיים עם CTA להורדת MomSafe.", cta: "הורידי MomSafe", source: "רעיון #8 (מקורי)", isNew: false, caution: null,
+  { id: 12, persona: "הריון", priority: "high", topic: "טוקסופלסמה, אוכל בחוץ וירקות — מה הקשר?", format: "ריל", audience: "הריון", goal: "ליד מגנט", desc: "הוק: 'ידעת שהסיכון לטוקסו לא רק מבשר?' — מסביר את הקשר המפתיע בין אכילה בחוץ, ירקות לא שטופים כראוי, וזיהום בטוקסופלסמה. מסתיים עם CTA להורדת MomSafe.", cta: "הורידי MomSafe", source: "רעיון #8 (מקורי)", isNew: false,
     script: `HOOK (0–3 שניות):
 חשבת שהסיכון לטוקסופלסמה זה רק מבשר לא מבושל?
 יש עוד מקור — והוא פחות מוכר.
@@ -1131,54 +929,385 @@ CLOSE + CTA (24–30 שניות):
 רוצה את כל מה שצריך לדעת על בטיחות מזון בהיריון, במקום אחד?
 💜 הורידי את MomSafe — המדריך החינמי שלי. הלינק בביו`,
     hashtags: "#טוקסופלסמה #בטיחותמזון #תזונהבהריון #דיאטנית #NBClinic" },
+
+  { id: 31, persona: "הריון", priority: "high", topic: "POV: חשבת שאת 'אוכלת בשביל שניים' ועלית 30 ק\"ג", format: "ריל", audience: "הריון", goal: "חשיפה + אמפתיה", desc: "פורמט POV קליל וממיין-פנימה שמפרק את מיתוס ה'אכילה בשביל שניים' דרך הומור עצמי, לא שיפוטי. הפקה קלה, פוטנציאל הפצה גבוה. מקור: פגישת קריאייטיב + מסמך אסטרטגיה.", cta: "שמרי • הורידי MomSafe", source: "רעיון מפגישת קריאייטיב (מבוקש)", isNew: true,
+    script: `[פורמט POV — טקסט על מסך, ללא דיבור או עם וויס קליל]
+
+טקסט 1:
+POV: שמעת "עכשיו את אוכלת בשביל שניים" בערך 400 פעם.
+
+טקסט 2:
+אז עלית 30 ק"ג.
+
+טקסט 3:
+והתינוק שקל 3,900 גרם.
+
+טקסט 4 (עם חיוך, לא שיפוטיות):
+"בשביל שניים" זה לא מכפיל כמות — התינוק צריך תוספת קטנה של קלוריות, לא עוד צלחת.
+
+CTA (טקסט אחרון):
+רוצה לדעת כמה באמת צריך, לפי טרימסטר? MomSafe מחכה לך בביו 💜`,
+    caption: `"עכשיו את אוכלת בשביל שניים" — שמעתי את זה בערך 400 פעם.
+
+האמת? "בשביל שניים" זה לא מכפיל כמות. זו תוספת קטנה של קלוריות, שמשתנה לפי טרימסטר — לא עוד צלחת שלמה.
+
+זה לא אשמה, זו סתם אי-הבנה שעוברת מדור לדור. וזה בדיוק סוג הדברים שאני מרכזת ב-MomSafe, המדריך החינמי שלי.
+
+רוצה לדעת כמה באמת צריך, בלי ניחושים?
+💜 הורידי את MomSafe — הלינק בביו`,
+    hashtags: "#אכילהבשבילשניים #תזונהבהריון #דיאטנית #מעגלהפיריון #pregnancynutrition #NBClinic" },
+
+  { id: 28, persona: "הריון", priority: "medium", topic: "3 מזונות שמשפיעים על התפתחות התינוק בהריון", format: "קרוסל", audience: "הריון", goal: "ערך + ליד", desc: "קרוסל ערכי שממקד ל-3 קטגוריות מזון בעלות השפעה מוכחת על ההתפתחות (דגים עתירי אומגה 3, ביצים/כולין, מזונות עתירי ברזל) — לא רשימת איסורים, אלא מיקוד בחיוב. מקור: פגישת קריאייטיב.", cta: "שמרי • הורידי MomSafe", source: "רעיון מפגישת קריאייטיב (מבוקש)", isNew: true,
+    script: `שקף 1 (פתיחה):
+3 מזונות שממש משפיעים על ההתפתחות של התינוק — ורוב הנשים לא שומעות עליהם מספיק.
+
+שקף 2:
+דגים עתירי אומגה 3 (סלמון, סרדינים) — תומכים בהתפתחות המוח והראייה של העובר. חשוב לבחור סוגים בטוחים ובכמות מתונה.
+
+שקף 3:
+ביצים — המקור הכי נגיש לכולין, קריטי להתפתחות מערכת העצבים. רוב הנשים לא מגיעות ליעד היומי (ראי גם את הפוסט על כולין).
+
+שקף 4:
+מזונות עתירי ברזל (בשר אדום רזה, קטניות) — מניעת אנמיה בהריון ותמיכה באספקת החמצן לעובר.
+
+שקף 5 (CTA):
+לא צריך לשנות את כל התפריט. רק לדעת למה לתת עדיפות.
+רוצה תפריט שמכסה את כל מה שחשוב, במקום אחד?
+הורידי את MomSafe — הלינק בביו 💜`,
+    caption: `3 מזונות שממש משפיעים על ההתפתחות של התינוק — ורוב הנשים לא שומעות עליהם מספיק.
+
+דגים עתירי אומגה 3, ביצים (כולין), ומזונות עתירי ברזל — כל אחד מהם תומך בפן אחר של ההתפתחות: המוח, מערכת העצבים, ואספקת החמצן.
+
+לא צריך לשנות את כל התפריט. רק לדעת למה לתת עדיפות כשאין הרבה זמן או תיאבון.
+
+רוצה תפריט שמכסה את כל מה שחשוב, במקום אחד?
+💜 הורידי את MomSafe — הלינק בביו`,
+    hashtags: "#תזונהבהריון #התפתחותהעובר #דיאטנית #מעגלהפיריון #pregnancynutrition #NBClinic" },
+
+  { id: 29, persona: "הריון", priority: "medium", topic: "מאכלים אסורים בהריון שלא ידעת עליהם", format: "ריל", audience: "הריון", goal: "חשיפה + ערך", desc: "מתמקד במאכלים פחות מוכרים (לא הרשימה הסטנדרטית שכולן כבר שמעו) — נבטים חיים, גבינות רכות לא מפוסטרות, כבד (עודף ויטמין A). מקור: פגישת קריאייטיב.", cta: "הורידי MomSafe", source: "רעיון מפגישת קריאייטיב (מבוקש)", isNew: true,
+    script: `HOOK (0–3 שניות):
+שמעת כבר על סושי נא ואלכוהול. אבל 3 האלה כנראה לא הזכירו לך.
+
+BODY (3–24 שניות):
+נבטים חיים (אלפאלפא, חמניה) — יכולים להכיל חיידקים גם אחרי שטיפה, כי הם גדלים בתנאים לחים שמעודדים זיהום.
+
+גבינות רכות מחלב לא מפוסטר (כמו סוגי ברי/קממבר מיובאים) — סיכון לליסטריה.
+
+כבד ומוצרי כבד בכמות גדולה — עודף ויטמין A עלול להזיק לעובר במינונים גבוהים.
+
+CLOSE + CTA (24–30 שניות):
+זה לא כדי להפחיד — זה כדי שתדעי בדיוק מה לבדוק לפני שאת קונה.
+רוצה את הרשימה המלאה, במקום אחד?
+הורידי את MomSafe — הלינק בביו 💜`,
+    caption: `שמעת כבר על סושי נא ואלכוהול. אבל את שלושת אלה כנראה לא הזכירו לך:
+נבטים חיים, גבינות רכות מחלב לא מפוסטר, וכבד בכמות גדולה.
+
+זה לא כדי להפחיד — זה כדי שתדעי בדיוק מה לבדוק לפני שאת קונה או מזמינה.
+
+רוצה את הרשימה המלאה של בטיחות מזון בהריון, במקום אחד?
+💜 הורידי את MomSafe — הלינק בביו`,
+    hashtags: "#בטיחותמזון #תזונהבהריון #דיאטנית #מעגלהפיריון #NBClinic" },
+
+  { id: 30, persona: "הריון", priority: "medium", topic: "מאכלים שמותר לך לאכול בהריון ולא ידעת", format: "קרוסל", audience: "הריון", goal: "ערך + הרגעה", desc: "קרוסל מרגיע-מיתוסים — סושי מדגים מבושלים, גבינות רכות מפוסטרות, בשר קר מחומם, קפאין במידה, דבש. ממסגר את עודף הזהירות כמשהו שאפשר לשחרר. מקור: פגישת קריאייטיב.", cta: "שמרי • הורידי MomSafe", source: "רעיון מפגישת קריאייטיב (מבוקש)", isNew: true,
+    script: `שקף 1 (פתיחה):
+כל מה שוויתרת עליו 'ליתר ביטחון' — ולא היה צריך.
+
+שקף 2:
+סושי? כן, אם הדג מבושל (טמפורה, אונגי) או מוקפא כראוי. לא כל סושי אסור.
+
+שקף 3:
+גבינות רכות — מותרות, אם הן מפוסטרות. תבדקי תווית, לא תוותרי על כל הקטגוריה.
+
+שקף 4:
+בשר קר (נקניק, פסטרמה) — מותר אם מחממים אותו היטב לפני האכילה.
+
+שקף 5:
+קפאין ודבש — שניהם מותרים במידה סבירה. אין צורך לוותר לגמרי.
+
+שקף 6 (CTA):
+עודף זהירות יוצר לחץ מיותר. את מותרות ליהנות גם בהריון.
+רוצה את הרשימה המלאה, בלי ניחושים? MomSafe מחכה לך בביו 💜`,
+    caption: `כל מה שוויתרת עליו "ליתר ביטחון" — ולא היה צריך.
+
+סושי מדגים מבושלים או קפואים כראוי, גבינות רכות מפוסטרות, בשר קר מחומם היטב, קפאין ודבש במידה — כולם מותרים.
+
+עודף זהירות יוצר לחץ מיותר. מגיע לך ליהנות מאוכל גם בהריון, לא רק לפחד ממנו.
+
+רוצה את הרשימה המלאה, בלי ניחושים?
+💜 הורידי את MomSafe — הלינק בביו`,
+    hashtags: "#תזונהבהריון #מיתוסיהריון #דיאטנית #מעגלהפיריון #NBClinic" },
+
+  { id: 32, persona: "אחרי לידה", priority: "medium", topic: "3 דברים שלמדתי מההריון הראשון שלי", format: "קרוסל", audience: "אחרי לידה", goal: "אמון + קהילה", desc: "תבנית סטוריטלינג אישית — נועם ממלאת את 3 התובנות האמיתיות שלה (גוף/רגש/מקצועי). מקור: פגישת קריאייטיב. לא כתבתי עבורה תוכן אישי בדוי — זו תבנית מוכנה למילוי.", cta: "כתבי לי RISE / GLOW", source: "רעיון מפגישת קריאייטיב (מבוקש) — דורש מילוי אישי", isNew: true, caution: "התבנית מוכנה אבל התוכן חייב להיות הסיפור האמיתי שלך — לא כתבתי עבורך פרטים אישיים בדויים. מלאי את שלושת התובנות לפני הצילום.",
+    script: `[פורמט: קרוסל אישי / דיבור מול מצלמה — תוכן ליבה לפרסונה 3]
+
+שקף 1 (פתיחה):
+3 דברים שלמדתי מההריון הראשון שלי (ושהלוואי וידעתי לפני).
+
+שקף 2:
+דבר ראשון — [את ממלאת: משהו שקשור לגוף / לבדיקות / לתזונה שהפתיע אותך]
+
+שקף 3:
+דבר שני — [את ממלאת: משהו שקשור לרגש, לזהות, או לציפיות שהתבררו כלא ריאליות]
+
+שקף 4:
+דבר שלישי — [את ממלאת: משהו מקצועי שהיית עושה אחרת היום, כדיאטנית]
+
+שקף 5 (CTA):
+כל התובנות האלה עברו לתוך הליווי שאני נותנת היום — כדי שלא תצטרכי ללמוד הכל בדרך הקשה.
+רוצה ללוות אותך? כתבי לי RISE / GLOW בתגובות 💜`,
+    caption: `3 דברים שלמדתי מההריון הראשון שלי (ושהלוואי וידעתי לפני):
+
+[את ממלאת: 3 התובנות האמיתיות שלך — אחת על הגוף, אחת על הרגש, אחת מקצועית]
+
+כל התובנות האלה עברו לתוך הליווי שאני נותנת היום.
+
+רוצה ללוות אותך, בלי שתצטרכי ללמוד הכל בדרך הקשה?
+💜 כתבי לי RISE / GLOW בתגובות`,
+    hashtags: "#ההריוןשלי #אחרילידה #מעגלהפיריון #דיאטנית #NBClinic" },
+
+  { id: 11, persona: "הריון", priority: "low", topic: "ההנחיות לעלייה במשקל בהריון — מה באמת חדש ב-2026?", format: "פוסט סטטי", audience: "הריון", goal: "אוטוריטה", desc: "⚠️ בדיקה עדכנית (יוני 2026): אין כרגע הנחיה רשמית וסופית חדשה מ-ACOG/CDC לעלייה במשקל בהריון. התקן הקיים עדיין מבוסס על IOM 2009 (לפי BMI התחלתי). מה שיש בפועל: בינואר 2026 התקיים workshop של National Academies (בשיתוף CDC) שדן באפשרות לעדכן את ההנחיה — אך טרם פורסמה החלטה רשמית.", cta: "—", source: "רעיון #3 (חדש)", isNew: true, caution: "דורש ניסוח זהיר. מומלץ למסגר כ'מה ההנחיות הקיימות אומרות ולמה הן נבדקות מחדש' ולא כ'מה השתנה ב-2026' — כדי לשמור על דיוק עובדתי. להשהות עד לאימות סופי.", script: null, caption: null, hashtags: null },
 ];
-const days = [
-  { label: "יום א׳ 30.6", idx: 1 },
-  { label: "יום ב׳ 1.7", idx: 2 },
-  { label: "יום ג׳ 2.7", idx: 3 },
-  { label: "יום ד׳ 3.7", idx: 4 },
-  { label: "יום ה׳ 4.7", idx: 5 },
-  { label: "שישי–שבת", idx: null, rest: true },
+
+// MAYA_OFRI_DAY1: התסריטים המדויקים ממסמך הקריאייטיב של מאיה ועופרי, תחת הכותרת
+// "תסריטים יום צילום 1". מוצג כתת-כותרת נפרדת בטאב "תסריטים לצילום" ולא במאגר הכללי.
+const MAYA_OFRI_DAY1 = [
+  { id: 40, shootDay: 1, order: 1, topic: "וובינר סלפי ישיר", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "נושא הוובינר: איך לעבור את ההיריון בריאה, חיונית ובמשקל מאוזן בלי לוותר על המאכלים שעושים לך טוב (ובלי להרגיש אשמה). דגש: תזונה בהריון זה לא רק 'לרדת במשקל' — מניעת סיבוכים, ניהול אנרגיה, הכנה ללידה קלה יותר. שוטים לצילום: דיבור ישיר למצלמה.", cta: "הרשמה לוובינר", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #1",
+    script: `הכנתי להן הדרכה בחינם שתלמד אתכן איך לנהל את העלייה במשקל בהריון תוך הזנה חיונית לתינוק שלך במהלך תקופת ההריון.
+
+אם את בהריון ראשון ואת לא יודעת איך לנהל את התזונה שלך או מה בדיוק את אמורה לעשות אחרת, או שאת לא בהריון הראשון שלך אבל את לא רוצה לעלות שוב 30 קילו ולהתבאס על עצמך אחרי זה — בדיוק בשבילכן בניתי הדרכה חינמית שתסביר לכן איך לעבור את ההיריון בריאה, חיונית ובמשקל מאוזן בלי לוותר על המאכלים שעושים לך טוב. איך לשים את העובר שלך במרכז, להזין אותו בדיוק במה שהוא צריך, אבל בלי לשכוח את עצמך בדרך.
+
+מספר המקומות מוגבל, להרשמה ופרטים לחצי על הקישור.`, caption: null, hashtags: null },
+
+  { id: 41, shootDay: 1, order: 2, topic: "וובינר וויס אובר", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "טרם נכתב במסמך המקור — רק מבנה השלד (הוק / נקודת כאב / הצגת פיתרון / מי אני בקצרה / הזמנה לוובינר). שוטים לצילום: טרם נקבע.", cta: "הרשמה לוובינר", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #2", caution: "התסריט הזה עדיין ריק במסמך המקור (רק כותרות שלד). יש להשלים לפני הצילום, או להוריד אם לא רלוונטי.",
+    script: `הוק: [טרם מולא]
+
+נקודת כאב: [טרם מולא]
+
+הצגת פיתרון: [טרם מולא]
+
+מי אני בקצרה: [טרם מולא]
+
+הזמנה לוובינר: [טרם מולא]`, caption: null, hashtags: null },
+
+  { id: 42, shootDay: 1, order: 3, topic: "מדריך בתשלום סלפי ישיר", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "מדריך בחילות וצרבות (40 ₪). שוטים לצילום: דיבור ישיר מול מצלמה, להחזיק מיקרופון ביד.", cta: "לינק למדריך", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #3",
+    script: `אם את הריונית ואת סובלת מבחילות או צרבות — הסרטון הזה בשבילך.
+
+לפני שאת פונה לכדורים ותרופות, אפשר לטפל בבחילות והצרבות של ההריון בצורה טבעית, דרך התזונה שלך, והכנתי לך מדריך שינחה אותך איך בדיוק להתמודד עם התופעה הזו.
+
+אני נעם בר אל, דיאטנית קלינית מתמחה לנשים בהריון, והכנתי את המדריך הזה אחרי שגם אני בהריון שלי התמודדתי עם התופעה הזו, ואחרי שליוויתי עשרות נשים במהלך ההריון לתזונה בריאה לעובר ולהן. כתבתי את המדריך הזה שבעיני הוא חובה לכל מי שסובלת מהצרבות והבחילות האלה, ושתביני — הוא במחיר של חולצה משיין! רק ב-40 שקלים.
+
+אז תלחצי על הקישור, הוא מחכה לך שם.`, caption: null, hashtags: null },
+
+  { id: 43, shootDay: 1, order: 4, topic: "מדריך בתשלום סטוריטלינג דיבור מול מצלמה", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "אותו מדריך בחילות וצרבות, בגרסת סטוריטלינג. שוטים לצילום: נעם על הספה מקפלת כביסה של התינוק שלה.", cta: "לינק למדריך", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #4",
+    script: `הריון זה דבר מדהים, אבל בואו נדבר רגע על הבחילות והצרבות.
+
+ולמי שרק עכשיו התחילה — אני אספר לך שהסיוט של תחילת ההריון זה הבחילות של ההתחלה. הרגע שאת מתעוררת עד הרגע שאת הולכת לישון, את מרגישה בחילה אחת גדולה, את מרגישה כמו בור בבטן, ואת מרגישה שאת חייבת לאכול כדי להעביר את הבחילה. אבל אחרי שאת אוכלת, הבחילה לא נרגעת — להיפך, היא באה אליך בהפוך על הפוך.
+
+ואז אחרי שעובר השליש הראשון, ובשליש השני את בעניים — זהו, החלק הקשה מאחוריך — מגיע השליש השלישי והוא מביא את הצרבות, ששם את מרגישה שנשרף לך הגרון במיוחד בלילות, והבעל נוחר לידך כאילו כלום!
+
+בקיצור — סיוט שלא ברא.
+
+אם את עכשיו בתקופה הזו — קודם כל מזל טוב, וגם תנחומיי. אבל למזלך, אחרי שליוויתי עשרות נשים במהלך ההריון לתזונה בריאה לעובר ולהן, הכנתי לך מדריך שינחה אותך איך בדיוק להתמודד עם התופעה הזו, ומה מומלץ או לא מומלץ לאכול בתקופה הזו.
+
+ובעיני, המדריך הזה חובה לכל הריונית.`, caption: null, hashtags: null },
+
+  { id: 44, shootDay: 1, order: 5, topic: "מכירה ישירה וויס אובר", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "מכירה ישירה של Pregnancy Glow Path, בגרסת וויס אובר. שוטים לצילום: סרטונים שלך מההריון, סרטונים שלך אוכלת, סרטונים עם הילדה.", cta: "לינק ל-Pregnancy Glow Path", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #5",
+    script: `הוק:
+כשנכנסתי להיריון הראשון, המציאות פגשה אותי בסיבוב.
+
+נקודת כאב:
+למרות שאני דיאטנית קלינית ויודעת הכל על תזונה, ההריון הזה תפס אותי לא מוכנה. השליש הראשון שלי היה סיוט של בחילות, חוסר תיאבון ואכילת פחמימות ריקות. שם הבנתי שבהיריון חוקי המשחק משתנים. הבנתי שרופאה פרטית ב-1,000 שקל לפגישה לא תפתור לי את היומיום. אני רוצה לשמור על הריון בריא ותקין, לוודא שהתינוקת שלי תקבל את כל מה שהיא צריכה להתפתחות שלה, אבל גם לשמור על הגוף שלי ולהצליח להתמודד עם כל מה שההריון מביא איתו. בתור אמא ואשת מקצוע, אני מאמינה שלדחות זה אף פעם לא עובד — כי ביום שאחרי הלידה הכל הופך לקשה פי אלף. את בלילות לבנים, ההוצאות ממשיכות לגדול, והזמן שלך שואף לאפס. הטיפול בגוף שלך ובבריאות של העובר חייב להתחיל מעכשיו. היריון זו תקופה מדהימה אם יודעים איך לחיות אותה נכון. את לא צריכה לסחוב איתך רגשות אשם או פחד מהמשקל במשך תשעה חודשים. מגיע לך ליהנות מההיריון הזה, לישון בשקט בלילה בידיעה שהתינוק שלך מקבל את הטוב ביותר, ושאת שומרת על הבית של שניכם — הגוף שלך.
+
+הצגת פיתרון:
+בדיוק בגלל זה יצרתי את Pregnancy Glow Path — ליווי אישי לאורך כל ההיריון, שמוכיח לך שאת לא צריכה לבחור בין היריון תקין ובריא לעובר, לבין לשמור על עצמך ולא לעלות 20 או 30 קילו. איך לנהל את המשקל בצורה שפויה, איך להזין את התינוק שלך, ואיך להתמודד עם הבחילות והצרבות — בליווי שמבין בדיוק מה עובר עלייך.
+
+הזמנה למכירה:
+לחצי על הקישור עכשיו, ובואי נעבור את המסע הזה יחד, בריאות ומאוזנות.`, caption: null, hashtags: null },
+
+  { id: 45, shootDay: 1, order: 6, topic: "מכירה ישירה דיבור מול מצלמה", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "מכירה ישירה של Pregnancy Glow Path, דיבור ישיר מול מצלמה.", cta: "לינק ל-Pregnancy Glow Path", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #6",
+    script: `הוק:
+אם את בהיריון, כנראה שאת מסתובבת עם המחשבה הזו בראש בלופים.
+
+נקודת כאב:
+מצד אחד, הדבר הכי חשוב לך בעולם זה שההיריון הזה יהיה תקין, בריא, ושהעובר יקבל את כל מה שהוא צריך. מצד שני, את בחרדה עמוקה מלעמוד על המשקל ולראות מספרים שאת לא תדעי איך להתמודד איתם ביום שאחרי הלידה.
+
+הצגת פיתרון:
+תרשי לי להרגיע אותך: זה לא אנוכי לרצות לשמור על הגוף שלך, וזה לא בא על חשבון הבריאות של התינוק שלך. את לא צריכה לבחור בין השניים, ואת ממש לא חייבת לסיים את ההיריון הזה עם עוד 20 או 30 קילו רק כי "ככה זה להיות בהריון".
+
+מי אני בקצרה:
+אני נעם בר-אל, דיאטנית קלינית, ויצרתי את Pregnancy Glow Path — תוכנית ליווי אישית וצמודה של 10 מפגשים, שמלווה אותך לאורך כל חודשי ההיריון. המטרה שלנו היא אחת: לבנות לך מעטפת תזונתית מותאמת אישית, שתוודא שהעובר שלך מתפתח בצורה הכי בריאה ותקינה שיש, בזמן שאת שומרת על עלייה מתונה, בריאה ומבוקרת במשקל. בלי לסבול, בלי תפריטים בלתי אפשריים, ועם פתרונות אמיתיים לבחילות, לחשקים ולעייפות. אם זה היריון ראשון ואת חושבת "אני אסתדר לבד" — חבל שתעברי את זה בניסוי וטעייה ותגיעי לסוף ההיריון מתוסכלת. ואם זה היריון שני אחרי שעלית המון בקודם, או היריון יקר שהגיע אחרי טיפולים מתישים — הפעם את לא משאירה את זה ליד המקרה. את שמה את עצמך ואת הבריאות של שניכם בידיים מקצועיות. ההיריון הזה יכול להיראות אחרת. את יכולה להרגיש קלילה, חיונית, קורנת, ולדעת שאת עושה את המקסימום בשבילו ובשבילך.
+
+הזמנה למכירה:
+מספר המקומות לליווי האישי שלי בכל חודש הוא מוגבל מאוד כדי להעניק את היחס הכי צמוד שיש. תלחצי על הקישור כאן למטה, תשאירי פרטים, ובואי נבטיח שההיריון הזה יהיה הבריא והנכון ביותר עבורך.`, caption: null, hashtags: null },
+
+  { id: 46, shootDay: 1, order: 7, topic: "מכירה קייס סטאדי", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "קייס סטאדי אמיתי של מלווה עם היסטוריה של הפרעות אכילה. דורש הצגת תמונת הודעה אמיתית מהלקוחה (עם מרקר על הטקסט הרלוונטי).", cta: "לינק לליווי", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #7", caution: "כולל ציטוט הודעה אישית מלקוחה — יש לוודא אישור שלה לשימוש בתמונה/ציטוט לפני פרסום.",
+    script: `הוק:
+מהפרעות אכילה וחרדות — היא עברה הריון תקין לפי ההמלצות וילדה תינוקת בריאה.
+
+התהליך:
+היא הגיעה אליי לליווי בשליש הראשון להריון, כשמערכת היחסים שלה עם אוכל הייתה מורכבת. מחשבות על כל דבר שנכנס לה לפה, הפרעות אכילה שמלוות אותה מהעבר, וההבנה שעכשיו היא נכנסת להריון — הכניסה אותה ללחץ שאין לה שליטה על המשקל שלה ועל כמה שהגוף שלה הולך להשתנות.
+
+בתהליך האישי שלה, מעבר להתאמה של תוספי תזונה וטיפול בבחילות ובצרבות, המטרה העיקרית הייתה לעבוד על מה שקורה לה בלב ובראש — החלק הרגשי של הדימוי גוף, הפחד מעלייה במשקל, החרדה שמלווה אותה, והחשש מהנקודה שבה היא תסיים את ההריון.
+
+באמצעות כלים התנהגותיים כמו מנגנון הרעב והשובע, גישת 80/20, ניהול חשקים וניהול אכילה רגשית ומעגלי שליטה — היא סיימה את ההיריון עם עלייה של 12 קילו בדיוק, הטווח הכי בריא שיש, במדדים מושלמים ובלידה קלה.
+
+אבל הניצחון האמיתי היה ההודעה שהיא שלחה לי בסיום התהליך ואחרי הלידה:
+[להציג את התמונה של ההודעה ולמרקר את הנקרא]
+"להריון הבא אני נכנסת יותר ברוגע, כי אני יודעת איך הגוף שלי מתנהג, ואני מנרמלת את העלייה לטווחים הרצויים, ויש רוגע ושלווה להריון הבא."
+
+מסר והנעה לפעולה:
+ואם גם את רוצה להרגיש ככה, לחצי על הקישור ונעבור יחד את המסע שמתאים לך.`, caption: null, hashtags: null },
+
+  { id: 47, shootDay: 1, order: 8, topic: "מכירה דיבור מול מצלמה סטוריטלינג — 3 דברים שלמדתי מההריון הראשון שלי", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "הגרסה הרשמית והמאושרת מהמסמך (שונה במעט מגרסאות טיוטה קודמות). הערות סאונד/עריכה: סטיץ' קווין רובין >> מהות התזונה >> מסר ומכירה; מסגרת תזונתית גמישה >> כל אחת מכם מכירה את מאגרי התזונה שהיא צריכה; \"רק כי אכלת בשביל שניים…..\". שוטים לצילום: דיבור מול מצלמה מדיום שוט.", cta: "כתבי 'הריון' בתגובות", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #8",
+    script: `כותרת על הסרטון: 3 דברים שלמדתי מההריון הראשון שלי
+
+1. הבדידות של ההתחלה היא אמיתית. הכל חדש, מציף ומפחיד. את עמוק בתוך הבחילות ומרגישה כל כך רע, ואין לך את מי לשתף ועם מי להתייעץ, כי ההיריון עדיין שמור בסוד.
+
+2. הנפיחות הבטנית של השבועות הראשונים היא לא בגלל שהעובר גדל, אלא בגלל שהעלייה של הפרוגסטרון גורמת להאטה משמעותית בתנועתיות המעי. לכן את חווה עצירות ונפיחות שמרגישה כאילו את כבר בחודש חמישי, כשבפועל את רק בשבוע 8.
+
+3. הייתי בטוחה שכדיאטנית אני אוכל רק בריא. בפועל, בשליש הראשון חייתי על קרקרים, ובשליש השני לא הפסקתי לחשוב על בורקסים. הבנתי שאישה בהיריון לא צריכה תפריט חונק — היא צריכה עוגנים גמישים ומסגרת נוחה.
+
+וזו רק ההתחלה. את כל התובנות ריכזתי לתיק דיגיטלי אחד גדול שמלווה נשים בהריון שלהן, ואיך לנהל אותו נכון בכל הפרמטרים — בתזונה, בבדיקות, במעקבים, ויוצר וודאות וראש שקט.
+
+אם את רוצה שאשלח לך לינק לרכישה, כתבי את המילה "הריון" בתגובות.`, caption: null, hashtags: null },
+
+  { id: 48, shootDay: 1, order: 9, topic: "מכירה ישירה תיק הריון — דברים שהייתי עושה לפני היריון ב-2026", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "הערת המקור: להמיר לסרטון חשיפה שמוביל למכירת התיק הדיגיטלי (CheckMom).", cta: "היילייטס 'צ'ק מאם'", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #9", caution: "סעיף 2 (\"משהו תזונתי\") עדיין לא מולא במסמך המקור. אפשרויות שכבר עלו בשיחה: ברזל (מומלץ) / איזון סוכר / אומגה 3 — יש להשלים לפני הצילום.",
+    script: `דברים שהייתי עושה אם הייתי רוצה להיכנס להריון ב-2026:
+
+1- לוקחת מולטי ויטמין לנשים בהריון, או לפחות חומצה פולית. היא מפחיתה באופן משמעותי — עד 70% — את הסיכון למומים מולדים במערכת העצבים של העובר.
+
+2- [משהו תזונתי — טרם הושלם]
+
+3- מתחילה לעשות פעילות גופנית! כשיש תשתית אימונים טובה לפני ההריון, הרבה יותר קל לי לתחזק את זה במהלך ההריון עצמו.
+
+4- בונה תיק הריון דיגיטלי שמשקף לך את כל הנתונים במקום אחד — מעקבים, תזכורות, ניתוח ופיענוח בדיקות, התאמת תפריט לפי טרימסטר, ספריית ידע תזונתית עם פתרונות לבחילות, צרבות ובטיחות מזון בהריון. וכל מה שאת צריכה לראש שקט במהלך ההריון עצמו, שייתן לך ביטחון בבריאות שלך ושל העובר שלך.
+
+או נכנסת להיילייטס "צ'ק מאם" שלי, שהתיק הדיגיטלי שהכנתי מחכה לך שם.`, caption: null, hashtags: null },
+
+  { id: 49, shootDay: 1, order: 10, topic: "מכירה ישירה תיק הריון — רשימת שאלות", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "כולל סיפור אישי על עלות רופאים פרטיים בהריון שלה. מבנה: הוק (שאלות) → הצגת פתרון → מי אני בקצרה → הזמנה למכירה.", cta: "לינק לתיק ההריון", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), תסריט #10",
+    script: `הוק:
+איך להתמודד עם הבחילות, הצרבות וההקאות בהריון?
+מה מותר ומה אסור לאכול כשאת יוצאת למסעדה?
+כמה את אמורה לעלות במשקל בכל שבוע ובהריון כולו?
+איך לנהל את האכילה בכל טרימסטר?
+איך מפענחים את בדיקות הדם ואת המסת הסוכר?
+איך יודעים לבחור את תוספי התזונה שמתאימים לך?
+
+הצגת פיתרון:
+כל התשובות לשאלות האלו, ועוד המון כלים, מחכים לך במקום אחד: בתיק ההיריון הדיגיטלי שבניתי עבורך, שנשאר איתך להיריון הנוכחי ולכל ההיריונות הבאים.
+
+מי אני בקצרה:
+אני נעם בר-אל, דיאטנית קלינית לנשים בהיריון ואחרי לידה. בשנים האחרונות ליוויתי מאות נשים, אבל האמת? את הפתרון הזה בניתי קודם כל מתוך הקושי שלי. בהיריון שלי שילמתי אלפי שקלים על רופאים פרטיים, ועדיין הרגשתי אבודה. אז לקחתי את הידע המקצועי שלי, ניתחתי כל שבוע בהיריון ואת התופעות שלו, וזיקקתי הכל לתוך תיק דיגיטלי אחד.
+[הצגת הצצה מתוך האתר]
+והוא מכיל את כל מה שאת חייבת לדעת, יחד עם מעקבים חיוניים שיעזרו לך לנהל את ההיריון נכון, להחזיר את השליטה לידיים שלך, ופשוט להפסיק לפחד ממה שקורה לך בגוף. היריון לא חייב להיות מלווה בלחץ ובחוסר ודאות. התיק הדיגיטלי הזה הוא השקט הנפשי שלך.
+
+הזמנה למכירה:
+[חוזר לדיבור מול מצלמה] כל הפרטים מחכים לך עכשיו בלחיצה על הקישור כאן למטה, נתראה בפנים.`, caption: null, hashtags: null },
+
+  { id: 50, shootDay: 1, order: 11, topic: "מכירה ישירה — מדריך צרבות ובחילות (טיפ בודד)", format: "ריל", audience: "הריון", goal: "חשיפה", desc: "סרטון קצר שנותן טיפ אחד בודד מתוך המדריך כדי לחמם למכירה. תבנית כותרת: 'דברים ש… / סיבות ל… / דרכים ל…'.", cta: "תגיבי מילת מפתח לקבלת המדריך", source: "מסמך קריאייטיב — יום צילום 1 (מאיה ועופרי), נספח אחרי טבלת התסריטים", caution: "הטיפ הספציפי [טיפ / דרך] לא נבחר עדיין במסמך המקור — יש לבחור טיפ קונקרטי אחד מתוך המדריך לפני הצילום.",
+    script: `הוק:
+יש 7 שיטות שיעזרו לך להיפטר מהבחילות בהריון. את יכולה לקרוא את כולן במדריך שלי לבחילות וצרבות שיצרתי, אבל חשוב לי לתת לך את אחת מהן שממש עזרה לי בהריון שלי.
+
+ערך:
+[טיפ / דרך — טרם נבחר]
+
+הזמנה למכירה:
+אם את רוצה להכיר את כל הדרכים, תגיבי את המילה "____" ותקבלי את המדריך לרכישה בפרטי.`, caption: null, hashtags: null },
 ];
-const days2 = [
-  { label: "יום א׳ 7.7", idx: 8 },
-  { label: "יום ב׳ 8.7", idx: 9 },
-  { label: "יום ג׳ 9.7", idx: 10 },
-  { label: "יום ד׳ 10.7", idx: 11 },
-  { label: "יום ה׳ 11.7", idx: 12 },
-  { label: "שישי–שבת", idx: null, rest: true },
+
+// LIBRARY_POSTS: כל הפוסטים האורגניים במקום אחד — גם אלה שכבר משובצים ביומן
+// (CALENDAR_POSTS, עם persona/priority מוזרקים מ-audience) וגם המאגר הפתוח (ORGANIC_POOL).
+// MAYA_OFRI_DAY1 בכוונה לא נכנס לכאן — הוא מוצג רק כתת-כותרת ייעודית בטאב "תסריטים לצילום",
+// לא בלוח השנה/פוסטים אורגניים, כי אלה תסריטי הפקה קונקרטיים ליום צילום ולא רעיונות לשיבוץ עצמאי.
+const LIBRARY_POSTS = CALENDAR_POSTS.map(p => Object.assign({}, p, { persona: p.audience, priority: p.priority || 'high' })).concat(ORGANIC_POOL);
+const ALL_EDITABLE_POSTS = LIBRARY_POSTS.concat(MAYA_OFRI_DAY1);
+
+// נקודות הכניסה לתנועה — הקשר עסקי, לא לוח יומן. מוצג כתרשים זרימה בטאב הפאנלים.
+// כל panel: audience (קהל יעד), steps (השלבים שהלקוחה עוברת בפועל, מהתחלה עד הסגירה — הצעד האחרון הוא ה"outcome").
+const ENTRY_PANELS = [
+  { name: "מדריך בתשלום — בחילות וצרבות", price: "39.90 ₪", cls: "", audience: "הריון", steps: [
+      "רואה ריל/קרוסל על בחילות וצרבות בהריון",
+      "רוכשת את המדריך (39.90 ₪)",
+      "מקבלת הזמנה אוטומטית לשיחת הכרות חינמית",
+      "שיחת הכרות: מיפוי שלב ההריון והצרכים",
+      "הצעה ראשית: Pregnancy Glow Path (ליווי מלא להריון)",
+      "אם לא מתאים כרגע — הצעה משנית: CheckMom (תיק הריון הדיגיטלי)",
+    ], metrics: [["70%","הגעה לפגישה"],["20%","סגירה"],["5","יעד סגירות PREG"]] },
+
+  { name: "MomSafe — מדריך בטיחות מזון", price: "חינם", cls: "coral", audience: "הריון", steps: [
+      "רואה תוכן ערך על תזונה/בטיחות מזון בהריון",
+      "מגיבה מילת מפתח → מקבלת קישור למדריך ב-DM",
+      "מורידה את המדריך (ליד מגנט)",
+      "נכנסת לרצף חימום (סטוריז + תוכן) לקראת CheckMom",
+      "הצעת רכישה של CheckMom עם פתיחת ההרשמה",
+    ], metrics: [["—","עלות ליד"],["—","לידים"],["—","יעד"]] },
+
+  { name: "וובינר הריון", price: "אירוע חי", cls: "teal", audience: "הריון", steps: [
+      "נרשמת לוובינר על תזונה/משקל/בדיקות בהריון",
+      "מגיעה לוובינר החי",
+      "בסיום: שיחת הכרות (ניתן להציע גם CheckMom)",
+      "התאמת מסלול — בעיקר Pregnancy Glow Path",
+    ], metrics: [["25–30%","הגעה"],["10% / 50%","סגירה ממגיע/ממקדמה"],["8","יעד סגירות"]] },
+
+  { name: "RISE Path — לפני היריון", price: "2,270 ₪", cls: "", audience: "לפני היריון", steps: [
+      "רואה תוכן ליבה על לופ ה'הכל או כלום', PCOS או IVF",
+      "מגיבה 'RISE' בתגובות",
+      "מקבלת הודעה פרטית עם שאלון קצר (מצב פוריות/משקל)",
+      "שיחת הכרות: מיפוי מצב ספציפי (הכנה כללית / PCOS / IVF)",
+      "הצעת RISE Path — 6 מפגשים, שחרור מהלופ + הכנה להריון",
+    ], metrics: [["—","עלות ליד"],["—","לידים"],["—","יעד סגירות"]] },
+
+  { name: "RISE Path — אחרי לידה", price: "2,270 ₪", cls: "", audience: "אחרי לידה", steps: [
+      "רואה תוכן אמפתי על עייפות/הנקה/ירידה במשקל ריאלית",
+      "מגיבה 'RISE' בתגובות",
+      "מקבלת הודעה פרטית עם שאלון קצר (שבוע לאחר לידה, הנקה)",
+      "שיחת הכרות: מיפוי מצב + ציפיות ריאליות",
+      "הצעת RISE Path — ליווי אישי לחזרה שפויה לעצמה",
+    ], metrics: [["—","עלות ליד"],["—","לידים"],["—","יעד סגירות"]] },
+
+  { name: "השקת CheckMom CLUB", price: "990 ₪", cls: "coral", audience: "אחרי לידה", steps: [
+      "תוכן בילד-אפ (סטוריז + פוסטים) על מעגל אמהות קבוצתי",
+      "פתיחת הרשמה מוקדמת (Early Bird) לקבוצה ראשונה",
+      "השארת פרטים / הודעה בתגובות",
+      "שיחת התאמה קצרה (לוודא שהתזמון והצרכים מתאימים)",
+      "סגירת מקום בקבוצה (6-7 נשים, 6 מפגשים, 3 חודשים)",
+    ], metrics: [["6–7","גודל קבוצה"],["6","מפגשים"],["6–7","יעד סגירות לקבוצה"]] },
 ];
 
 const fmtClass = (f) => f.replace(/\s/g, '-');
+const personaClass = (a) => 'persona-' + a.replace(/\s/g, '-');
+const PERSONA_COLOR = { "לפני היריון": "var(--p-pre)", "הריון": "var(--p-preg)", "אחרי לידה": "var(--p-post)", "שניהם": "var(--gray-dark)" };
+const PERSONA_DESC = {
+  "לפני היריון": "לופ ה'הכל או כלום', PCOS, IVF, הכנה להריון — מוביל ל-RISE Path",
+  "הריון": "ניהול ההריון, בטיחות מזון, ותזונה יומיומית — מוביל ל-Pregnancy Glow Path ול-MomSafe/CheckMom",
+  "אחרי לידה": "החזרה לעצמה, הנקה, ירידה במשקל ריאלית — מוביל ל-RISE Path",
+  "שניהם": "תוכן קהילתי/מותגי שרלוונטי לכל הקהל, ללא פרסונה ספציפית",
+};
 
-let activeFilter = 'all';
+let activeLibFilter = { format: 'all', persona: 'all' };
 
-function buildFilters() {
-  const formats = ['all', 'ריל', 'קרוסל', 'פוסט סטטי'];
-  const labels = { all: 'הכל', 'ריל': 'ריילז', 'קרוסל': 'קרוסלים', 'פוסט סטטי': 'פוסטים סטטיים' };
-  const el = document.getElementById('filters');
-  el.innerHTML = formats.map(f =>
-    `<button class="filter-btn ${f === 'all' ? 'active' : ''}" data-fmt="${f}" onclick="setFilter('${f}')">${labels[f]}</button>`
-  ).join('');
+function escapeForJs(str) { return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$'); }
+
+function getStore(key) { return localStorage.getItem(key) === '1'; }
+function setStore(key, val) { localStorage.setItem(key, val ? '1' : '0'); }
+
+function priorityBadge(p) {
+  const labels = { high: '🔴 עדיפות גבוהה', medium: '🟡 עדיפות בינונית', low: '⚪ עדיפות נמוכה' };
+  return `<span class="tag tag-priority-${p}">${labels[p] || p}</span>`;
 }
 
-function setFilter(fmt) {
-  activeFilter = fmt;
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.fmt === fmt);
-  });
-  renderGantt();
-}
-
-function postCardHtml(p) {
+function postCardHtml(p, opts) {
+  opts = opts || {};
   const fc = fmtClass(p.format);
-  return `<div class="post-card fmt-${fc}" onclick="openModal(${p.id})">
+  const extraCls = opts.byPersona ? ' ' + personaClass(p.audience) : '';
+  return `<div class="post-card fmt-${fc}${extraCls}" onclick="openModal(${p.id})">
     <div class="post-main">
       <div class="post-topic">${p.topic}</div>
       <div class="post-tags">
         <span class="tag tag-format-${fc}">${p.format}</span>
         <span class="tag tag-audience">${p.audience}</span>
         ${p.goal ? `<span class="tag tag-goal">${p.goal}</span>` : ''}
+        ${p.priority ? priorityBadge(p.priority) : ''}
         ${p.isNew ? '<span class="tag tag-new">✨ חדש</span>' : ''}
         ${p.hasScript ? '<span class="tag tag-goal">📝 סקריפט מוכן</span>' : ''}
         ${p.caution ? '<span class="tag tag-caution">⚠️ דורש בדיקה</span>' : ''}
@@ -1188,66 +1317,414 @@ function postCardHtml(p) {
   </div>`;
 }
 
-function renderWeekBlock(title, daySpec) {
-  const filtered = activeFilter === 'all' ? posts : posts.filter(p => p.format === activeFilter);
-  let html = `<div class="week-section"><div class="week-title">${title} <span class="badge-count">${daySpec.filter(d=>d.idx).reduce((acc,d)=>acc + filtered.filter(p=>p.day===d.idx).length,0)} פוסטים</span></div>`;
-  daySpec.forEach(d => {
-    const dayPosts = d.idx ? filtered.filter(p => p.day === d.idx) : [];
-    html += `<div class="day-block ${d.rest ? 'is-rest' : ''}">
-      <div class="day-header"><span class="dot-day"></span>${d.label}${d.rest ? ' — יום מנוחה' : ''}</div>`;
-    if (d.rest) {
-      html += `<div class="empty-slot">—</div>`;
-    } else if (dayPosts.length === 0) {
-      html += `<div class="empty-slot">אין פוסט בפילטר הנוכחי</div>`;
-    } else {
-      html += `<div class="posts-grid">${dayPosts.map(postCardHtml).join('')}</div>`;
-    }
-    html += `</div>`;
-  });
-  html += `</div>`;
-  return html;
+/* ---------- TABS ---------- */
+const TABS = [
+  { id: 'tab-panels', label: '🚀 פאנלים' },
+  { id: 'tab-content', label: '🗓️ אסטרטגיית תוכן' },
+  { id: 'tab-tasks', label: '✅ משימות לביצוע' },
+  { id: 'tab-scripts', label: '🎬 תסריטים לצילום' },
+  { id: 'tab-organic', label: '🌱 פוסטים אורגניים' },
+];
+function buildTabsNav() {
+  document.getElementById('tabs-nav').innerHTML = TABS.map((t, i) =>
+    `<button class="tab-btn ${i === 0 ? 'active' : ''}" data-tab="${t.id}" onclick="switchTab('${t.id}')">${t.label}</button>`
+  ).join('');
+}
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(el => el.classList.toggle('active', el.id === id));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
 }
 
-function renderGantt() {
-  document.getElementById('gantt-root').innerHTML =
-    renderWeekBlock('שבוע 1 — 30.6 עד 4.7', days) +
-    renderWeekBlock('שבוע 2 — 7.7 עד 11.7', days2);
+/* ---------- TAB 1: פאנלים ---------- */
+function renderEntryPanels() {
+  document.getElementById('entry-panels-root').innerHTML = `
+    <div class="section-title">🎯 נקודות כניסה לתנועה — תרשים זרימה ללקוחה</div>
+    <div class="entry-panels-row">
+      ${ENTRY_PANELS.map(p => `
+        <div class="entry-panel-card ${p.cls}">
+          <span class="entry-panel-price">${p.price}</span>
+          ${p.audience ? `<span class="tag tag-audience" style="margin-right:6px;">👥 ${p.audience}</span>` : ''}
+          <h4>${p.name}</h4>
+          <div class="flow-diagram">
+            ${p.steps.map((s, i) => `
+              ${i > 0 ? '<div class="flow-arrow">↓</div>' : ''}
+              <div class="flow-step${i === p.steps.length - 1 ? ' outcome' : ''}">${s}</div>
+            `).join('')}
+          </div>
+          <div class="entry-panel-metrics">
+            ${p.metrics.map(m => `<span class="entry-metric"><b>${m[0]}</b> ${m[1]}</span>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
 }
 
-function renderFunnel() {
-  const stages = [
-    { num: 1, label: "שלב 1 — מודעות" },
-    { num: 2, label: "שלב 2 — עניין" },
-    { num: 3, label: "שלב 3 — רצון" },
-    { num: 4, label: "שלב 4 — פעולה (יום השקה)" },
-    { num: 5, label: "שלב 5 — ריטרגטינג" },
-  ];
+/* ---------- TAB 2: אסטרטגיית תוכן (לוח שנה אינטראקטיבי) ---------- */
+function renderStats() {
+  const total = LIBRARY_POSTS.length;
+  const reels = LIBRARY_POSTS.filter(p => p.format === 'ריל').length;
+  const carousels = LIBRARY_POSTS.filter(p => p.format === 'קרוסל').length;
+  const statics = LIBRARY_POSTS.filter(p => p.format === 'פוסט סטטי').length;
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-lbl">פוסטים בספרייה</div></div>
+    <div class="stat-card"><div class="stat-num">${reels}</div><div class="stat-lbl">ריילז</div></div>
+    <div class="stat-card"><div class="stat-num">${carousels}</div><div class="stat-lbl">קרוסלים</div></div>
+    <div class="stat-card"><div class="stat-num">${statics}</div><div class="stat-lbl">פוסטים סטטיים</div></div>`;
+}
+
+const LS_CAL = 'nb_marketing_calendar_v2';
+function loadCal() { try { return JSON.parse(localStorage.getItem(LS_CAL)); } catch (e) { return null; } }
+function saveCal(cal) { localStorage.setItem(LS_CAL, JSON.stringify(cal)); }
+function initCalendar() {
+  let cal = loadCal();
+  if (cal) return cal;
+  cal = {};
+  saveCal(cal);
+  return cal;
+}
+let calendarData = initCalendar();
+let calViewYear = 2026, calViewMonth = 7;
+
+function daysInMonth(y, m) { return new Date(y, m, 0).getDate(); }
+function fmtDateHeShort(iso) { const [y, m, d] = iso.split('-'); return `${d}.${m}.${y.slice(2)}`; }
+
+function renderCalendar() {
+  const grid = document.getElementById('cal-grid');
+  const label = document.getElementById('cal-month-label');
+  const monthNames = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
+  label.textContent = `${monthNames[calViewMonth - 1]} ${calViewYear}`;
+  const firstDow = new Date(calViewYear, calViewMonth - 1, 1).getDay();
+  const numDays = daysInMonth(calViewYear, calViewMonth);
+  const todayISO = new Date().toISOString().slice(0, 10);
   let html = '';
-  stages.forEach(s => {
-    const stagePosts = funnelPosts.filter(p => p.stage === s.num);
-    if (stagePosts.length === 0) return;
-    html += `<div class="funnel-stage" data-stage="${s.num}">
-      <div class="funnel-stage-header">
-        <span class="funnel-stage-num">${s.num}</span>
-        <span class="funnel-stage-title">${s.label}</span>
+  ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'].forEach(d => html += `<div class="cal-dow">${d}</div>`);
+  for (let i = 0; i < firstDow; i++) html += `<div class="cal-day empty"></div>`;
+  for (let day = 1; day <= numDays; day++) {
+    const iso = `${calViewYear}-${String(calViewMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const assigned = calendarData[iso] || [];
+    const chips = assigned.map(pid => {
+      const p = LIBRARY_POSTS.find(x => x.id === pid);
+      if (!p) return '';
+      return `<div class="cal-chip fmt-${fmtClass(p.format)}" onclick="event.stopPropagation();openModal(${p.id})">${p.topic}</div>`;
+    }).join('');
+    html += `<div class="cal-day ${iso === todayISO ? 'today' : ''}" onclick="openDayModal('${iso}')">
+      <div class="cal-daynum">${day}</div>
+      ${chips}
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+function shiftMonth(delta) {
+  calViewMonth += delta;
+  if (calViewMonth < 1) { calViewMonth = 12; calViewYear--; }
+  if (calViewMonth > 12) { calViewMonth = 1; calViewYear++; }
+  renderCalendar();
+}
+function openDayModal(iso) {
+  const assigned = calendarData[iso] || [];
+  const dateObj = new Date(iso + 'T00:00:00');
+  const label = dateObj.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' });
+  const assignedHtml = assigned.length ? assigned.map(pid => {
+    const p = LIBRARY_POSTS.find(x => x.id === pid);
+    if (!p) return '';
+    return `<div class="task-row"><span class="tag tag-format-${fmtClass(p.format)}">${p.format}</span><span class="task-label" style="flex:1;margin:0;">${p.topic}</span><span class="task-del" onclick="unassignPost('${iso}',${pid})">✕</span></div>`;
+  }).join('') : `<div class="empty-slot">אין פוסטים משובצים ליום זה</div>`;
+  const available = LIBRARY_POSTS.filter(p => !assigned.includes(p.id));
+  const optionsHtml = available.map(p => `<option value="${p.id}">${p.topic}</option>`).join('');
+  document.getElementById('day-modal-content').innerHTML = `
+    <div class="modal-title">שיבוץ פוסטים — ${label}</div>
+    <div class="modal-section-label">פוסטים משובצים</div>
+    <div style="margin-bottom:16px;">${assignedHtml}</div>
+    <div class="modal-section-label">הוסיפי פוסט מתוך "פוסטים אורגניים"</div>
+    <div style="display:flex; gap:8px;">
+      <select id="day-post-select" style="flex:1; padding:8px; border:1px solid var(--border); border-radius:8px; font-family:inherit;">${optionsHtml || '<option value="">אין עוד פוסטים זמינים בספרייה</option>'}</select>
+      <button onclick="assignPost('${iso}')" style="background:var(--purple);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;font-family:inherit;">שבצי</button>
+    </div>
+  `;
+  document.getElementById('dayModal').classList.add('open');
+}
+function closeDayModal() { document.getElementById('dayModal').classList.remove('open'); }
+function assignPost(iso) {
+  const sel = document.getElementById('day-post-select');
+  const pid = parseInt(sel.value);
+  if (!pid) return;
+  calendarData[iso] = calendarData[iso] || [];
+  calendarData[iso].push(pid);
+  saveCal(calendarData);
+  renderCalendar();
+  openDayModal(iso);
+  renderTasksTab();
+}
+function unassignPost(iso, pid) {
+  calendarData[iso] = (calendarData[iso] || []).filter(x => x !== pid);
+  saveCal(calendarData);
+  renderCalendar();
+  if (document.getElementById('dayModal').classList.contains('open')) openDayModal(iso);
+  renderTasksTab();
+}
+
+/* ---------- TAB 3: משימות לביצוע ---------- */
+function deadlineChip(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.round((d - today) / 86400000);
+  const dd = String(d.getDate()).padStart(2,'0'), mm = String(d.getMonth()+1).padStart(2,'0');
+  let cls, label;
+  if (diff === 0) { cls = 'today'; label = `היום (${dd}.${mm})`; }
+  else if (diff < 0) { cls = 'overdue'; label = `יעד עבר — ${dd}.${mm}`; }
+  else { cls = 'upcoming'; label = `${dd}.${mm}`; }
+  return `<span class="deadline-chip ${cls}">📅 ${label}</span>`;
+}
+function taskRowHtml(taskId, label, metaHtml, refId, onDelete) {
+  const done = getStore('nbtask_' + taskId);
+  return `<div class="task-row ${done ? 'done' : ''}" id="task-row-${taskId}">
+    <input type="checkbox" class="task-check" ${done ? 'checked' : ''} onchange="toggleTask('${taskId}')">
+    <div class="task-body" ${refId ? `onclick="openModal(${refId})"` : ''}>
+      <div class="task-label">${label}</div>
+      <div class="task-meta">${metaHtml}</div>
+    </div>
+    ${onDelete ? `<span class="task-del" onclick="${onDelete}" title="מחקי">✕</span>` : ''}
+  </div>`;
+}
+function toggleTask(taskId) {
+  const row = document.getElementById('task-row-' + taskId);
+  const checked = row.querySelector('.task-check').checked;
+  setStore('nbtask_' + taskId, checked);
+  row.classList.toggle('done', checked);
+  renderTaskProgress();
+}
+function renderTaskProgress() {
+  const all = document.querySelectorAll('.task-check');
+  const doneCount = document.querySelectorAll('.task-check:checked').length;
+  const el = document.getElementById('tasks-progress-label');
+  if (el) el.textContent = `${doneCount} / ${all.length} הושלמו`;
+}
+const OPS_TASKS_BASE = [
+  { id: 'ops1', label: 'לוודא שדף הנחיתה של MomSafe פעיל ומקושר לפני פרסום פוסט', date: null },
+  { id: 'ops2', label: 'להגדיר אוטומציית ManyChat למילת מפתח שתחזיר את הלינק ל-MomSafe', date: null },
+  { id: 'ops4', label: 'לתאם עם נועם את מילוי התובנות האישיות לפוסט "3 דברים שלמדתי מההריון הראשון שלי"', date: null },
+];
+const LS_HIDDEN_OPS = 'nb_hidden_ops_tasks';
+function loadHiddenOps() { try { return JSON.parse(localStorage.getItem(LS_HIDDEN_OPS)) || []; } catch (e) { return []; } }
+let hiddenOpsIds = loadHiddenOps();
+function deleteOpsTask(id) {
+  hiddenOpsIds.push(id);
+  localStorage.setItem(LS_HIDDEN_OPS, JSON.stringify(hiddenOpsIds));
+  renderTasksTab();
+}
+/* ---------- משימות אישיות (הוספה ידנית) ---------- */
+const LS_MANUAL_TASKS = 'nb_manual_tasks';
+function loadManualTasks() { try { return JSON.parse(localStorage.getItem(LS_MANUAL_TASKS)) || []; } catch (e) { return []; } }
+function saveManualTasks(t) { localStorage.setItem(LS_MANUAL_TASKS, JSON.stringify(t)); }
+let manualTasks = loadManualTasks();
+let manualTaskIdCounter = manualTasks.reduce((m, t) => Math.max(m, t.id), 0) + 1;
+
+function urgencyClass(u) { return u === 'גבוה' ? 'high' : u === 'בינוני' ? 'medium' : 'low'; }
+function addManualTask() {
+  const titleEl = document.getElementById('task-title-input');
+  const urgencyEl = document.getElementById('task-urgency-input');
+  const deadlineEl = document.getElementById('task-deadline-input');
+  const title = titleEl.value.trim();
+  if (!title) return;
+  manualTasks.push({ id: manualTaskIdCounter++, title, urgency: urgencyEl.value, deadline: deadlineEl.value || null, done: false });
+  saveManualTasks(manualTasks);
+  titleEl.value = ''; deadlineEl.value = '';
+  renderTasksTab();
+}
+function toggleManualTaskDone(id) {
+  const t = manualTasks.find(x => x.id === id);
+  if (!t) return;
+  t.done = !t.done;
+  saveManualTasks(manualTasks);
+  renderTasksTab();
+}
+function deleteManualTask(id) {
+  manualTasks = manualTasks.filter(x => x.id !== id);
+  saveManualTasks(manualTasks);
+  renderTasksTab();
+}
+function manualTaskRowHtml(t) {
+  return `<div class="task-row ${t.done ? 'done' : ''}">
+    <input type="checkbox" class="task-check" ${t.done ? 'checked' : ''} onchange="toggleManualTaskDone(${t.id})">
+    <div class="task-body">
+      <div class="task-label">${t.title}</div>
+      <div class="task-meta">
+        <span class="tag tag-priority-${urgencyClass(t.urgency)}">דחיפות: ${t.urgency}</span>
+        ${t.deadline ? deadlineChip(t.deadline) : '<span class="deadline-chip none">ללא דדליין</span>'}
       </div>
-      <div class="posts-grid">${stagePosts.map(postCardHtml).join('')}</div>
+    </div>
+    <span class="task-del" onclick="deleteManualTask(${t.id})" title="מחקי משימה">✕</span>
+  </div>`;
+}
+
+function renderTasksTab() {
+  let html = `<div class="task-group-title">🗓️ תוכן מתוזמן ביומן <span class="task-progress" id="tasks-progress-label"></span></div>`;
+  const scheduledDates = Object.keys(calendarData).filter(d => (calendarData[d] || []).length).sort();
+  if (!scheduledDates.length) {
+    html += `<div class="empty-slot">אין עדיין פוסטים משובצים ביומן. שבצי אותם בטאב "אסטרטגיית תוכן".</div>`;
+  } else {
+    scheduledDates.forEach(dateStr => {
+      calendarData[dateStr].forEach(pid => {
+        const p = LIBRARY_POSTS.find(x => x.id === pid);
+        if (!p) return;
+        html += taskRowHtml('cal-' + dateStr + '-' + pid, `${fmtDateHeShort(dateStr)}: ${p.topic}`, `<span class="tag tag-format-${fmtClass(p.format)}">${p.format}</span><span class="tag tag-audience">${p.audience}</span>${deadlineChip(dateStr)}`, p.id, `unassignPost('${dateStr}',${pid})`);
+      });
+    });
+  }
+  html += `<div class="task-group-title">🛠️ משימות תפעול תומכות</div>`;
+  const visibleOps = OPS_TASKS_BASE.filter(t => !hiddenOpsIds.includes(t.id));
+  html += visibleOps.length ? visibleOps.map(t =>
+    taskRowHtml(t.id, t.label, `<span class="deadline-chip none">ללא תאריך קבוע</span>`, null, `deleteOpsTask('${t.id}')`)
+  ).join('') : `<div class="empty-slot">אין משימות תפעול כרגע.</div>`;
+  html += `<div class="task-group-title">📝 משימות אישיות</div>`;
+  const sortedManual = [...manualTasks].sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    if (a.deadline && b.deadline) return a.deadline.localeCompare(b.deadline);
+    if (a.deadline) return -1;
+    if (b.deadline) return 1;
+    return 0;
+  });
+  html += sortedManual.length ? sortedManual.map(manualTaskRowHtml).join('') : `<div class="empty-slot">אין עדיין משימות אישיות. הוסיפי אחת למעלה.</div>`;
+  document.getElementById('tasks-root').innerHTML = html;
+  renderTaskProgress();
+}
+
+/* ---------- TAB 4: ספריית תסריטים ---------- */
+function renderMayaOfriDay1() {
+  const items = [...MAYA_OFRI_DAY1].sort((a, b) => a.order - b.order);
+  document.getElementById('maya-ofri-root').innerHTML = `
+    <div class="section-title">🎥 יום צילום עם מאיה ועופרי <span class="badge-count">${items.length}</span></div>
+    <div class="section-note">מתוך מסמך הקריאייטיב, תחת "תסריטים יום צילום 1". חלק מהתסריטים עדיין לא הושלמו במסמך המקור (מסומנים ב-⚠️) — ניתן לערוך ולהשלים אותם ישירות כאן.</div>
+    <div class="posts-grid">${items.map(p => postCardHtml(p)).join('')}</div>`;
+}
+function renderScriptsLibrary() {
+  const all = [...LIBRARY_POSTS].filter(p => p.script);
+  const formats = ['all', 'ריל', 'קרוסל', 'פוסט סטטי', 'סטורי'];
+  const fLabels = { all: 'כל הפורמטים', 'ריל': 'ריילז', 'קרוסל': 'קרוסלים', 'פוסט סטטי': 'פוסטים סטטיים', 'סטורי': 'סטוריז' };
+  document.getElementById('lib-filters').innerHTML = formats.map(f =>
+    `<button class="filter-btn ${activeLibFilter.format === f ? 'active' : ''}" onclick="setLibFilter('${f}')">${fLabels[f]}</button>`
+  ).join('');
+  const filtered = all.filter(p => activeLibFilter.format === 'all' || p.format === activeLibFilter.format);
+  document.getElementById('scripts-lib-root').innerHTML = `
+    <div class="section-title">🎬 כל התסריטים המוכנים לצילום <span class="badge-count">${filtered.length}</span></div>
+    <div class="posts-grid">${filtered.map(p => postCardHtml(p)).join('')}</div>`;
+}
+function setLibFilter(f) { activeLibFilter.format = f; renderScriptsLibrary(); }
+
+/* ---------- TAB 5: פוסטים אורגניים לפי פרסונה ---------- */
+function renderOrganicTab() {
+  document.getElementById('organic-cross-note').innerHTML =
+    `💡 כל הפוסטים האורגניים במקום אחד — כולל אלה שכבר משובצים ביומן בטאב "אסטרטגיית תוכן". אפשר לשבץ/לשבץ מחדש אותם בלוח השנה בכל רגע.`;
+  const order = ["לפני היריון", "הריון", "אחרי לידה", "שניהם"];
+  const priorityOrder = { high: 0, medium: 1, low: 2 };
+  let html = '';
+  order.forEach(persona => {
+    const items = LIBRARY_POSTS.filter(p => p.audience === persona)
+      .sort((a, b) => (priorityOrder[a.priority] ?? 9) - (priorityOrder[b.priority] ?? 9));
+    if (items.length === 0) return;
+    html += `<div class="persona-section">
+      <div class="persona-head"><span class="persona-dot" style="background:${PERSONA_COLOR[persona]}"></span><span class="persona-title">${persona}</span><span class="badge-count">${items.length} רעיונות</span></div>
+      <div class="persona-desc">${PERSONA_DESC[persona] || ''}</div>
+      <div class="posts-grid">${items.map(p => postCardHtml(p, { byPersona: true })).join('')}</div>
     </div>`;
   });
-  document.getElementById('funnel-root').innerHTML = html;
+  document.getElementById('organic-root').innerHTML = html;
 }
 
-function renderPool() {
-  const original = poolPosts.filter(p => p.id <= 12);
-  const persona1 = poolPosts.filter(p => p.id > 12);
-  document.getElementById('pool-root').innerHTML = original.map(postCardHtml).join('');
-  document.getElementById('pool-root-2').innerHTML = persona1.map(postCardHtml).join('');
+/* ---------- MODAL ---------- */
+/* ---------- עריכת פוסטים (כותרת/סקריפט/קפשן) ---------- */
+const LS_POST_EDITS = 'nb_post_edits';
+function loadPostEdits() { try { return JSON.parse(localStorage.getItem(LS_POST_EDITS)) || {}; } catch (e) { return {}; } }
+function savePostEdits(e) { localStorage.setItem(LS_POST_EDITS, JSON.stringify(e)); }
+function applyStoredPostEdits() {
+  const edits = loadPostEdits();
+  Object.keys(edits).forEach(idStr => {
+    const p = ALL_EDITABLE_POSTS.find(x => x.id === parseInt(idStr));
+    if (p) Object.assign(p, edits[idStr]);
+  });
 }
+function escapeAttr(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
 
-function escapeForJs(str) {
-  return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+function openModal(id) {
+  let p = ALL_EDITABLE_POSTS.find(x => x.id === id);
+  if (!p) return;
+  renderModalView(p);
+  document.getElementById('modal').classList.add('open');
 }
-
+function renderModalView(p) {
+  const fc = fmtClass(p.format);
+  let scriptHtml = '';
+  if (p.script) {
+    scriptHtml = `<div class="script-label-row"><span class="modal-section-label" style="margin:0">סקריפט / תוכן מלא</span><button class="copy-btn" onclick="copyText('script-${p.id}', this)">העתק</button></div>
+    <div class="script-block" id="script-${p.id}">${p.script}</div>`;
+  }
+  let captionHtml = '';
+  if (p.caption) {
+    captionHtml = `<div class="script-label-row"><span class="modal-section-label" style="margin:0">קפשן</span><button class="copy-btn" onclick="copyText('caption-${p.id}', this)">העתק</button></div>
+    <div class="caption-block" id="caption-${p.id}">${p.caption}${p.hashtags ? `<div class="hashtags-line">${p.hashtags}</div>` : ''}</div>`;
+  }
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-title">${p.topic}</div>
+    <div class="modal-tags">
+      <span class="tag tag-format-${fc}">${p.format}</span>
+      <span class="tag tag-audience">👥 ${p.audience}</span>
+      ${p.goal ? `<span class="tag tag-goal">🎯 ${p.goal}</span>` : ''}
+      ${p.priority ? priorityBadge(p.priority) : ''}
+      ${p.isNew ? '<span class="tag tag-new">✨ חדש</span>' : ''}
+      <button class="copy-btn" onclick="enterEditMode(${p.id})">✏️ ערוך</button>
+    </div>
+    ${p.caution ? `<div class="modal-caution">⚠️ ${p.caution}</div>` : ''}
+    <div class="modal-section-label">תקציר</div>
+    <div class="modal-desc">${p.desc}</div>
+    ${scriptHtml}
+    ${captionHtml}
+    ${p.cta && p.cta !== '—' && !p.script ? `<div class="modal-section-label">CTA</div><div class="modal-cta-text">${p.cta}</div>` : ''}
+    <div class="modal-source">מקור: ${p.source || '—'}</div>
+  `;
+}
+function renderModalEdit(p) {
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-section-label" style="margin-top:0;">כותרת</div>
+    <input type="text" id="edit-topic" value="${escapeAttr(p.topic)}" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;margin-bottom:14px;box-sizing:border-box;">
+    ${p.script != null ? `
+    <div class="modal-section-label">סקריפט</div>
+    <textarea id="edit-script" rows="11" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;line-height:1.7;margin-bottom:14px;box-sizing:border-box;">${p.script || ''}</textarea>` : ''}
+    ${p.caption != null ? `
+    <div class="modal-section-label">קפשן</div>
+    <textarea id="edit-caption" rows="6" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;line-height:1.7;margin-bottom:14px;box-sizing:border-box;">${p.caption || ''}</textarea>` : ''}
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button onclick="cancelModalEdit(${p.id})" style="background:var(--bg-soft);color:var(--text-secondary);border:1px solid var(--border-strong);border-radius:8px;padding:8px 16px;cursor:pointer;font-family:inherit;">ביטול</button>
+      <button onclick="saveModalEdit(${p.id})" style="background:var(--purple);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;font-family:inherit;">שמרי</button>
+    </div>
+  `;
+}
+function enterEditMode(id) {
+  const p = ALL_EDITABLE_POSTS.find(x => x.id === id);
+  if (p) renderModalEdit(p);
+}
+function cancelModalEdit(id) {
+  const p = ALL_EDITABLE_POSTS.find(x => x.id === id);
+  if (p) renderModalView(p);
+}
+function saveModalEdit(id) {
+  const p = ALL_EDITABLE_POSTS.find(x => x.id === id);
+  if (!p) return;
+  const topicEl = document.getElementById('edit-topic');
+  const scriptEl = document.getElementById('edit-script');
+  const captionEl = document.getElementById('edit-caption');
+  p.topic = topicEl.value;
+  if (scriptEl) p.script = scriptEl.value;
+  if (captionEl) p.caption = captionEl.value;
+  const edits = loadPostEdits();
+  edits[id] = { topic: p.topic, script: p.script, caption: p.caption };
+  savePostEdits(edits);
+  renderModalView(p);
+  renderScriptsLibrary();
+  renderMayaOfriDay1();
+  renderOrganicTab();
+  renderCalendar();
+  renderTasksTab();
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
 function copyText(elId, btn) {
   const text = document.getElementById(elId).innerText;
   navigator.clipboard.writeText(text).then(() => {
@@ -1257,55 +1734,20 @@ function copyText(elId, btn) {
     setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1500);
   });
 }
+document.getElementById('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
+document.getElementById('dayModal').addEventListener('click', (e) => { if (e.target.id === 'dayModal') closeDayModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeDayModal(); } });
 
-function openModal(id) {
-  let p = posts.find(x => x.id === id) || poolPosts.find(x => x.id === id) || funnelPosts.find(x => x.id === id);
-  if (!p) return;
-  const fc = fmtClass(p.format);
-  let scriptHtml = '';
-  if (p.script) {
-    scriptHtml += `<div class="script-label-row"><span class="modal-section-label" style="margin:0">סקריפט / תוכן מלא</span><button class="copy-btn" onclick="copyText('script-${p.id}', this)">העתק</button></div>
-    <div class="script-block" id="script-${p.id}">${p.script}</div>`;
-  }
-  let captionHtml = '';
-  if (p.caption) {
-    captionHtml += `<div class="script-label-row"><span class="modal-section-label" style="margin:0">קפשן</span><button class="copy-btn" onclick="copyText('caption-${p.id}', this)">העתק</button></div>
-    <div class="caption-block" id="caption-${p.id}">${p.caption}${p.hashtags ? `<div class="hashtags-line">${p.hashtags}</div>` : ''}</div>`;
-  }
-  document.getElementById('modal-content').innerHTML = `
-    <div class="modal-title">${p.topic}</div>
-    <div class="modal-tags">
-      <span class="tag tag-format-${fc}">${p.format}</span>
-      <span class="tag tag-audience">👥 ${p.audience}</span>
-      ${p.goal ? `<span class="tag tag-goal">🎯 ${p.goal}</span>` : ''}
-      ${p.isNew ? '<span class="tag tag-new">✨ חדש</span>' : ''}
-    </div>
-    ${p.caution ? `<div class="modal-caution">⚠️ ${p.caution}</div>` : ''}
-    <div class="modal-section-label">תקציר</div>
-    <div class="modal-desc">${p.desc}</div>
-    ${scriptHtml}
-    ${captionHtml}
-    ${p.cta && p.cta !== '—' && !p.script ? `<div class="modal-section-label">CTA</div><div class="modal-cta-text">${p.cta}</div>` : ''}
-    <div class="modal-source">מקור: ${p.source}</div>
-  `;
-  document.getElementById('modal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-}
-
-document.getElementById('modal').addEventListener('click', (e) => {
-  if (e.target.id === 'modal') closeModal();
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
-});
-
-buildFilters();
-renderGantt();
-renderFunnel();
-renderPool();
+/* ---------- INIT ---------- */
+applyStoredPostEdits();
+buildTabsNav();
+renderEntryPanels();
+renderStats();
+renderCalendar();
+renderTasksTab();
+renderMayaOfriDay1();
+renderScriptsLibrary();
+renderOrganicTab();
 </script>
 
 </body>
