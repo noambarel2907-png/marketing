@@ -106,6 +106,8 @@
   .post-card.category-leadmagnet { border-right-color: var(--teal); }
   .post-card.category-education { border-right-color: var(--purple); }
   .post-card.category-community { border-right-color: var(--gray-dark); }
+  .post-card.shoot-day { box-shadow: 0 0 0 2px var(--crit-text); }
+  .post-card.shoot-day:hover { box-shadow: 0 0 0 2px var(--crit-text), 0 4px 16px rgba(0,0,0,.06); }
 
   .post-main { flex: 1; min-width: 0; }
   .post-topic { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
@@ -305,12 +307,6 @@
       </div>
     </div>
     <div id="tasks-root"></div>
-  </div>
-
-  <div class="tab-panel" id="tab-scripts">
-    <div id="maya-ofri-root"></div>
-    <div class="controls-row" id="lib-filters"></div>
-    <div id="scripts-lib-root"></div>
   </div>
 
   <div class="tab-panel" id="tab-claude-ideas">
@@ -1250,12 +1246,13 @@ const MAYA_OFRI_DAY1 = [
 ];
 
 // LIBRARY_POSTS: כל הפוסטים האורגניים במקום אחד — גם אלה שכבר משובצים ביומן
-// (CALENDAR_POSTS, עם persona/priority מוזרקים מ-audience) וגם המאגר הפתוח (ORGANIC_POOL).
-// MAYA_OFRI_DAY1 בכוונה לא נכנס לכאן — הוא מוצג רק כתת-כותרת ייעודית בטאב "תסריטים לצילום",
-// לא בלוח השנה/פוסטים אורגניים, כי אלה תסריטי הפקה קונקרטיים ליום צילום ולא רעיונות לשיבוץ עצמאי.
+// (CALENDAR_POSTS, עם persona/priority מוזרקים מ-audience), גם המאגר הפתוח (ORGANIC_POOL),
+// וגם תסריטי יום הצילום עם מאיה ועופרי (MAYA_OFRI_DAY1) — משובצים לפי אותן קטגוריות מטרה,
+// אבל מסומנים dedicatedShoot:true (מסגרת אדומה על הכרטיס) כי הם תסריטי הפקה קונקרטיים ליום
+// צילום ספציפי, לא רעיונות פתוחים לשיבוץ עצמאי.
 // קטגוריות תוכן — "תיקיות" לפי מטרת הפוסט (לא לפי פרסונה). נקבע ידנית לפי ה-CTA/goal בפועל.
 const CATEGORIES = [
-  { key: 'sale', label: '💰 קידום מכירה', color: 'var(--coral)', desc: 'מוביל ישירות למכירה בתשלום — RISE Path, Pregnancy Glow Path, CheckMom CLUB, או מדריך בתשלום.' },
+  { key: 'sale', label: '💰 קידום מכירה', color: 'var(--coral)', desc: 'מוביל ישירות למכירה בתשלום — RISE Path, Pregnancy Glow Path, CheckMom (תיק הריון הדיגיטלי), CheckMom CLUB, או מדריך בתשלום.' },
   { key: 'leadmagnet', label: '🎁 ליד מגנט', color: 'var(--teal)', desc: 'מוביל להורדת המדריך החינמי (MomSafe) או לרכישת המדריך המוזל לבחילות וצרבות (MomRelief) — שני המסלולים הם חימום שבסוף אמור להמשיך לצ׳ק מאם / לליווי אישי, לא מכירה סופית בפני עצמה.' },
   { key: 'education', label: '🎓 ידע מקצועי וערך', color: 'var(--purple)', desc: 'תוכן חינוכי או הפרכת מיתוסים בלי CTA מוצרי — בונה אוטוריטה ואמון.' },
   { key: 'community', label: '💜 אמפתיה וקהילה', color: 'var(--gray-dark)', desc: 'תוכן אישי או מאחורי-הקלעים שבונה קרבה וקהילה, בלי הצעת מכירה.' },
@@ -1263,6 +1260,8 @@ const CATEGORIES = [
 const CATEGORY_BY_ID = {
   1: 'leadmagnet', 2: 'leadmagnet', 3: 'sale', 4: 'sale', 5: 'education', 6: 'sale', 7: 'leadmagnet', 8: 'leadmagnet', 9: 'community', 10: 'community',
   11: 'education', 12: 'leadmagnet', 13: 'sale', 14: 'sale', 15: 'sale', 16: 'leadmagnet', 17: 'sale', 27: 'sale', 28: 'leadmagnet', 29: 'leadmagnet', 30: 'leadmagnet', 31: 'leadmagnet', 32: 'sale',
+  // 40-50: תסריטי יום צילום עם מאיה ועופרי (מסומנים dedicatedShoot: true בהמשך, ראו MAYA_OFRI_DAY1)
+  40: 'sale', 41: 'sale', 42: 'leadmagnet', 43: 'leadmagnet', 44: 'sale', 45: 'sale', 46: 'sale', 47: 'sale', 48: 'sale', 49: 'sale', 50: 'leadmagnet',
 };
 function categoryOf(id) { return CATEGORY_BY_ID[id] || 'education'; }
 function categoryClass(key) { return 'category-' + key; }
@@ -1280,6 +1279,7 @@ function inferCategory(p) {
 const SALE_PRODUCTS = [
   { key: 'rise', label: '🌀 RISE Path (לפני היריון / אחרי לידה)' },
   { key: 'preg', label: '🤰 Pregnancy Glow Path (הריון)' },
+  { key: 'checkmom', label: '📓 CheckMom (תיק הריון דיגיטלי)' },
   { key: 'club', label: '👯 CheckMom CLUB (ליווי קבוצתי)' },
 ];
 // תת-תיקיות בתוך "ליד מגנט" — איזה מדריך כל פוסט מוביל אליו.
@@ -1293,6 +1293,11 @@ const SUBGROUPS_BY_CATEGORY = { sale: SALE_PRODUCTS, leadmagnet: LEADMAGNET_TYPE
 const SUBCATEGORY_BY_ID = {
   3: 'rise', 4: 'rise', 6: 'rise', 13: 'rise', 14: 'rise', 15: 'rise', 17: 'rise', 27: 'rise', 32: 'rise',
   1: 'free', 2: 'free', 7: 'discount', 8: 'free', 12: 'free', 16: 'free', 28: 'free', 29: 'free', 30: 'free', 31: 'free',
+  // 40-50: תסריטי יום צילום עם מאיה ועופרי — 40/41 (וובינר) ו-44/45/46 (מכירה ישירה) מובילים ל-Pregnancy
+  // Glow Path; 47/48/49 מוכרים ספציפית את תיק ההריון הדיגיטלי (CheckMom); 42/43/50 מוכרים/מחממים
+  // למדריך המוזל לבחילות וצרבות (MomRelief).
+  40: 'preg', 41: 'preg', 44: 'preg', 45: 'preg', 46: 'preg', 47: 'checkmom', 48: 'checkmom', 49: 'checkmom',
+  42: 'discount', 43: 'discount', 50: 'discount',
 };
 // subcategoryOf: מחזיר את תת-התיקייה של פוסט — קודם לפי שדה subcategory על הפוסט עצמו
 // (פוסטים שנוספו ידנית מהדשבורד), אחרת לפי המיפוי הידני למעלה, אחרת ניחוש לפי מילות מפתח.
@@ -1486,8 +1491,9 @@ CLOSE + CTA (28–35 שניות):
 ];
 
 const LIBRARY_POSTS = CALENDAR_POSTS.map(p => Object.assign({}, p, { persona: p.audience, priority: p.priority || 'high' })).concat(ORGANIC_POOL)
-  .map(p => Object.assign(p, { category: categoryOf(p.id) }));
-const ALL_EDITABLE_POSTS = LIBRARY_POSTS.concat(MAYA_OFRI_DAY1).concat(CLAUDE_IDEAS);
+  .map(p => Object.assign(p, { category: categoryOf(p.id) }))
+  .concat(MAYA_OFRI_DAY1.map(p => Object.assign(p, { persona: p.audience, priority: p.priority || 'medium', category: categoryOf(p.id), dedicatedShoot: true })));
+const ALL_EDITABLE_POSTS = LIBRARY_POSTS.concat(CLAUDE_IDEAS);
 
 /* ---------- רעיונות מקלוד: מחיקה / העברה לפוסטים אורגניים ---------- */
 const LS_DELETED_IDEAS = 'nb_deleted_claude_ideas';
@@ -1523,7 +1529,6 @@ function transferIdeaToOrganic(id) {
   saveIdSet(LS_TRANSFERRED_IDEAS, transferredIdeaIds);
   renderClaudeIdeas();
   renderOrganicTab();
-  renderScriptsLibrary();
   renderStats();
 }
 
@@ -1544,7 +1549,6 @@ function deleteLibraryPost(id) {
   renderStats();
   renderCalendar();
   renderTasksTab();
-  renderScriptsLibrary();
   renderOrganicTab();
 }
 
@@ -1601,7 +1605,6 @@ function addManualLibraryPost() {
   renderStats();
   renderCalendar();
   renderTasksTab();
-  renderScriptsLibrary();
   renderOrganicTab();
 }
 
@@ -1659,8 +1662,6 @@ const ENTRY_PANELS = [
 
 const fmtClass = (f) => f.replace(/\s/g, '-');
 
-let activeLibFilter = { format: 'all', persona: 'all' };
-
 function escapeForJs(str) { return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$'); }
 
 function getStore(key) { return localStorage.getItem(key) === '1'; }
@@ -1674,7 +1675,7 @@ function priorityBadge(p) {
 function postCardHtml(p, opts) {
   opts = opts || {};
   const fc = fmtClass(p.format);
-  const extraCls = opts.byCategory ? ' ' + categoryClass(p.category) : '';
+  const extraCls = (opts.byCategory ? ' ' + categoryClass(p.category) : '') + (p.dedicatedShoot ? ' shoot-day' : '');
   return `<div class="post-card fmt-${fc}${extraCls}" onclick="openModal(${p.id})">
     <div class="post-main">
       <div class="post-topic">${p.topic}</div>
@@ -1686,6 +1687,7 @@ function postCardHtml(p, opts) {
         ${p.isNew ? '<span class="tag tag-new">✨ חדש</span>' : ''}
         ${p.hasScript ? '<span class="tag tag-goal">📝 סקריפט מוכן</span>' : ''}
         ${p.caution ? '<span class="tag tag-caution">⚠️ דורש בדיקה</span>' : ''}
+        ${p.dedicatedShoot ? '<span class="tag tag-caution">🎬 יום צילום ייעודי (מאיה ועופרי)</span>' : ''}
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
@@ -1700,7 +1702,6 @@ const TABS = [
   { id: 'tab-panels', label: '🚀 פאנלים' },
   { id: 'tab-content', label: '🗓️ אסטרטגיית תוכן' },
   { id: 'tab-tasks', label: '✅ משימות לביצוע' },
-  { id: 'tab-scripts', label: '🎬 תסריטים לצילום' },
   { id: 'tab-claude-ideas', label: '🤖 רעיונות מקלוד' },
   { id: 'tab-organic', label: '🌱 פוסטים אורגניים' },
 ];
@@ -1967,28 +1968,6 @@ function renderTasksTab() {
   renderTaskProgress();
 }
 
-/* ---------- TAB 4: ספריית תסריטים ---------- */
-function renderMayaOfriDay1() {
-  const items = [...MAYA_OFRI_DAY1].sort((a, b) => a.order - b.order);
-  document.getElementById('maya-ofri-root').innerHTML = `
-    <div class="section-title">🎥 יום צילום עם מאיה ועופרי <span class="badge-count">${items.length}</span></div>
-    <div class="section-note">מתוך מסמך הקריאייטיב, תחת "תסריטים יום צילום 1". חלק מהתסריטים עדיין לא הושלמו במסמך המקור (מסומנים ב-⚠️) — ניתן לערוך ולהשלים אותם ישירות כאן.</div>
-    <div class="posts-grid">${items.map(p => postCardHtml(p)).join('')}</div>`;
-}
-function renderScriptsLibrary() {
-  const all = [...LIBRARY_POSTS].filter(p => p.script);
-  const formats = ['all', 'ריל', 'קרוסל', 'פוסט סטטי', 'סטורי'];
-  const fLabels = { all: 'כל הפורמטים', 'ריל': 'ריילז', 'קרוסל': 'קרוסלים', 'פוסט סטטי': 'פוסטים סטטיים', 'סטורי': 'סטוריז' };
-  document.getElementById('lib-filters').innerHTML = formats.map(f =>
-    `<button class="filter-btn ${activeLibFilter.format === f ? 'active' : ''}" onclick="setLibFilter('${f}')">${fLabels[f]}</button>`
-  ).join('');
-  const filtered = all.filter(p => activeLibFilter.format === 'all' || p.format === activeLibFilter.format);
-  document.getElementById('scripts-lib-root').innerHTML = `
-    <div class="section-title">🎬 כל התסריטים המוכנים לצילום <span class="badge-count">${filtered.length}</span></div>
-    <div class="posts-grid">${filtered.map(p => postCardHtml(p)).join('')}</div>`;
-}
-function setLibFilter(f) { activeLibFilter.format = f; renderScriptsLibrary(); }
-
 /* ---------- רעיונות מקלוד ---------- */
 function claudeIdeaCardHtml(p) {
   const fc = fmtClass(p.format);
@@ -2140,8 +2119,6 @@ function saveModalEdit(id) {
   edits[id] = { topic: p.topic, script: p.script, caption: p.caption };
   savePostEdits(edits);
   renderModalView(p);
-  renderScriptsLibrary();
-  renderMayaOfriDay1();
   renderClaudeIdeas();
   renderOrganicTab();
   renderCalendar();
@@ -2168,8 +2145,6 @@ renderEntryPanels();
 renderStats();
 renderCalendar();
 renderTasksTab();
-renderMayaOfriDay1();
-renderScriptsLibrary();
 renderClaudeIdeas();
 renderOrganicTab();
 </script>
