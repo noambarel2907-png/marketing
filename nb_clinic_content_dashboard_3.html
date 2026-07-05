@@ -319,6 +319,33 @@
   </div>
 
   <div class="tab-panel" id="tab-organic">
+    <div class="panel" style="margin-bottom:1.5rem;">
+      <div class="panel-title">➕ הוספת פוסט ידנית</div>
+      <div class="task-form">
+        <input type="text" id="manual-post-topic" placeholder="כותרת הפוסט...">
+        <select id="manual-post-format">
+          <option value="ריל">ריל</option>
+          <option value="קרוסל">קרוסל</option>
+          <option value="פוסט סטטי">פוסט סטטי</option>
+          <option value="סטורי">סטורי</option>
+        </select>
+        <select id="manual-post-audience">
+          <option value="הריון">הריון</option>
+          <option value="אחרי לידה">אחרי לידה</option>
+          <option value="לפני היריון">לפני היריון</option>
+          <option value="שניהם">שניהם</option>
+        </select>
+        <select id="manual-post-category" onchange="updateManualPostSubcatField()">
+          <option value="sale">💰 קידום מכירה</option>
+          <option value="leadmagnet">🎁 ליד מגנט</option>
+          <option value="education">🎓 ידע מקצועי וערך</option>
+          <option value="community">💜 אמפתיה וקהילה</option>
+        </select>
+        <span id="manual-post-subcat-wrap"><select id="manual-post-subcat"></select></span>
+        <input type="text" id="manual-post-goal" placeholder="מטרה (למשל: ערך + ליד)...">
+        <button onclick="addManualLibraryPost()">הוסיפי</button>
+      </div>
+    </div>
     <div class="section-note" id="organic-cross-note"></div>
     <div id="organic-root"></div>
   </div>
@@ -1229,12 +1256,12 @@ const MAYA_OFRI_DAY1 = [
 // קטגוריות תוכן — "תיקיות" לפי מטרת הפוסט (לא לפי פרסונה). נקבע ידנית לפי ה-CTA/goal בפועל.
 const CATEGORIES = [
   { key: 'sale', label: '💰 קידום מכירה', color: 'var(--coral)', desc: 'מוביל ישירות למכירה בתשלום — RISE Path, Pregnancy Glow Path, CheckMom CLUB, או מדריך בתשלום.' },
-  { key: 'leadmagnet', label: '🎁 ליד מגנט', color: 'var(--teal)', desc: 'מוביל להורדת מדריך חינמי (כמו MomSafe) — חימום לקראת מכירה עתידית, לא מכירה עצמה.' },
+  { key: 'leadmagnet', label: '🎁 ליד מגנט', color: 'var(--teal)', desc: 'מוביל להורדת המדריך החינמי (MomSafe) או לרכישת המדריך המוזל לבחילות וצרבות (MomRelief) — שני המסלולים הם חימום שבסוף אמור להמשיך לצ׳ק מאם / לליווי אישי, לא מכירה סופית בפני עצמה.' },
   { key: 'education', label: '🎓 ידע מקצועי וערך', color: 'var(--purple)', desc: 'תוכן חינוכי או הפרכת מיתוסים בלי CTA מוצרי — בונה אוטוריטה ואמון.' },
   { key: 'community', label: '💜 אמפתיה וקהילה', color: 'var(--gray-dark)', desc: 'תוכן אישי או מאחורי-הקלעים שבונה קרבה וקהילה, בלי הצעת מכירה.' },
 ];
 const CATEGORY_BY_ID = {
-  1: 'leadmagnet', 2: 'leadmagnet', 3: 'sale', 4: 'sale', 5: 'education', 6: 'sale', 7: 'sale', 8: 'leadmagnet', 9: 'community', 10: 'community',
+  1: 'leadmagnet', 2: 'leadmagnet', 3: 'sale', 4: 'sale', 5: 'education', 6: 'sale', 7: 'leadmagnet', 8: 'leadmagnet', 9: 'community', 10: 'community',
   11: 'education', 12: 'leadmagnet', 13: 'sale', 14: 'sale', 15: 'sale', 16: 'leadmagnet', 17: 'sale', 27: 'sale', 28: 'leadmagnet', 29: 'leadmagnet', 30: 'leadmagnet', 31: 'leadmagnet', 32: 'sale',
 };
 function categoryOf(id) { return CATEGORY_BY_ID[id] || 'education'; }
@@ -1243,16 +1270,219 @@ function categoryClass(key) { return 'category-' + key; }
 // לפוסטים אורגניים — נבדק לפי מילות מפתח ב-goal/cta/desc, לא לפי id קבוע מראש.
 function inferCategory(p) {
   const text = [p.goal, p.cta, p.desc].filter(Boolean).join(' ');
+  if (/RELIEF|מדריך מוזל|MomSafe|MomRelief|חינם|הורידי|מדריך חינמי|ליד מגנט/.test(text)) return 'leadmagnet';
   if (/RISE|Glow|CLUB|מכירה|ליווי|רכישה|לינק ל/.test(text)) return 'sale';
-  if (/MomSafe|MomRelief|חינם|הורידי|מדריך חינמי|ליד מגנט/.test(text)) return 'leadmagnet';
   if (/קהילה|אמפתיה|שתפי|שאלי בתגובות/.test(text)) return 'community';
   return 'education';
+}
+
+// תת-תיקיות בתוך "קידום מכירה" — איזה מוצר בתשלום כל פוסט מקדם בפועל.
+const SALE_PRODUCTS = [
+  { key: 'rise', label: '🌀 RISE Path (לפני היריון / אחרי לידה)' },
+  { key: 'preg', label: '🤰 Pregnancy Glow Path (הריון)' },
+  { key: 'club', label: '👯 CheckMom CLUB (ליווי קבוצתי)' },
+];
+// תת-תיקיות בתוך "ליד מגנט" — איזה מדריך כל פוסט מוביל אליו.
+const LEADMAGNET_TYPES = [
+  { key: 'free', label: '🎁 מדריך חינמי — MomSafe' },
+  { key: 'discount', label: '💊 מדריך מוזל — בחילות וצרבות (MomRelief)' },
+];
+const SUBGROUPS_BY_CATEGORY = { sale: SALE_PRODUCTS, leadmagnet: LEADMAGNET_TYPES };
+// סיווג ידני לתת-תיקייה, לפוסטים הקיימים בספרייה (כמו CATEGORY_BY_ID למעלה).
+// id 32 מזכיר גם RISE וגם GLOW בתסריט עצמו — סווג לפי audience/persona בפועל (אחרי לידה → RISE).
+const SUBCATEGORY_BY_ID = {
+  3: 'rise', 4: 'rise', 6: 'rise', 13: 'rise', 14: 'rise', 15: 'rise', 17: 'rise', 27: 'rise', 32: 'rise',
+  1: 'free', 2: 'free', 7: 'discount', 8: 'free', 12: 'free', 16: 'free', 28: 'free', 29: 'free', 30: 'free', 31: 'free',
+};
+// subcategoryOf: מחזיר את תת-התיקייה של פוסט — קודם לפי שדה subcategory על הפוסט עצמו
+// (פוסטים שנוספו ידנית מהדשבורד), אחרת לפי המיפוי הידני למעלה, אחרת ניחוש לפי מילות מפתח.
+function subcategoryOf(p) {
+  if (p.subcategory) return p.subcategory;
+  if (SUBCATEGORY_BY_ID[p.id]) return SUBCATEGORY_BY_ID[p.id];
+  return inferSubcategory(p);
+}
+function inferSubcategory(p) {
+  const text = [p.goal, p.cta, p.desc].filter(Boolean).join(' ');
+  if (p.category === 'sale') {
+    if (/CLUB/i.test(text)) return 'club';
+    if (/Glow|PREG/i.test(text)) return 'preg';
+    return 'rise';
+  }
+  if (p.category === 'leadmagnet') {
+    if (/RELIEF|מוזל|בתשלום/i.test(text)) return 'discount';
+    return 'free';
+  }
+  return null;
 }
 
 // CLAUDE_IDEAS: כאן הסקיל /nb-content-plan מוסיף כל רעיון חדש שהוא מייצר (ריצה אחר ריצה,
 // בלי למחוק מה שכבר שם). מוצג בטאב "🤖 רעיונות מקלוד" — משם אפשר לערוך/למחוק/להעביר
 // לספריית "פוסטים אורגניים" (שם הוא ישובץ אוטומטית לתיקייה לפי inferCategory).
 const CLAUDE_IDEAS = [
+  { id: 51, topic: "חשק מטורף למתוק בהריון? זה לא חוסר שליטה — זו ביולוגיה", format: "ריל", audience: "הריון", goal: "ערך + חשיפה",
+    desc: "מסביר בקצרה איך שינויים הורמונליים בהריון (פרוגסטרון, אסטרוגן, hCG) משפיעים על תחושת הטעם והחשק, כדי להוריד אשמה מנשים שחשות 'בלי שליטה' מול חשקים למתוק. מחבר לכלי 'פירמידת אכילה' — האם זה חשק, רעב או הרגל. מסתיים ב-CTA לשמירה/הורדת MomSafe.",
+    cta: "שמרי את זה / הורידי MomSafe",
+    source: "רעיון קלוד — סבב 12.7–18.7.2026, פוקוס מילוי ליוויים + השקת CheckMom CLUB (2026-07-05)",
+    isNew: true, hasScript: true,
+    caution: "לנסח את הקשר ההורמונלי בזהירות — 'קשור לשינויים ברמות פרוגסטרון/אסטרוגן/hCG שמשפיעים על חוש הטעם וההעדפות', לא 'ההורמונים גורמים לחשק למתוק' כעובדה חד-משמעית.",
+    script: `HOOK (0–3 שניות):
+"באמצע הלילה, בהריון, ופתאום קמת בשביל שוקולד? זה לא 'בלי שליטה'."
+
+BODY (3–26 שניות):
+בהריון רמות הפרוגסטרון והאסטרוגן משתנות בענק — וזה קשור גם לאיך שאת חווה טעם וריח, וגם לאילו מאכלים פתאום נראים לך הכי טובים בעולם.
+זה לא חולשת אופי. זו ביולוגיה שעובדת ברקע.
+השאלה שבאמת שווה לשאול את עצמך היא לא "למה אני ככה" — אלא "מה זה בעצם, עכשיו: חשק, רעב, או הרגל?"
+כי לכל אחד מהם יש תשובה אחרת.
+
+CLOSE + CTA (26–33 שניות):
+חשק זה לא אויב שצריך לנצח. זה מידע שצריך לפענח.
+שמרי את הריל הזה למתי שתצטרכי אותו — ובמדריך MomSafe יש לך את כל הכלים לפענח את זה נכון.`,
+    caption: `"למה אני ככה?" — לא, את לא בלי שליטה.
+בהריון הגוף שלך עובר שינוי הורמונלי אמיתי, וחלק ממנו הוא איך שאת חווה טעם, ריח וחשק.
+זה לא חולשה. זו ביולוגיה.
+מה שכן שווה לבדוק בכל פעם מחדש: זה חשק, רעב, או הרגל? לכל אחד מהם יש דרך אחרת להתייחס אליו — ואת לא צריכה לפחד מאף אחד מהם.
+הגוף שלך לא הבעיה. המידע שקיבלת הוא הבעיה.
+שמרי את זה למתי שתצטרכי, ובמדריך MomSafe המצורף תמצאי את כל הכלים.`,
+    hashtags: "#תזונהבהריון #חשקיםבהריון #דיאטנית #מעגלהפריון #pregnancynutrition #NBClinic" },
+
+  { id: 52, topic: "3 דברים שאף אחד לא הכין אותך אליהם בחודש הראשון אחרי לידה", format: "קרוסל", audience: "אחרי לידה", goal: "אמפתיה + הזדהות",
+    desc: "קרוסל מנרמל שמזהה 3 חוויות שכיחות אך לא מדוברות בחודש הראשון אחרי לידה (עייפות קיצונית, נשנושים 'כדי לשרוד', רכבת הורמונלית) בלי שיפוטיות, כדי שאמהות טריות ירגישו נראות. לא כולל טענה רפואית — רק נירמול חוויה.",
+    cta: "שמרי את זה / תייגי חברה שעוברת את זה עכשיו",
+    source: "רעיון קלוד — סבב 12.7–18.7.2026, פוקוס מילוי ליוויים + השקת CheckMom CLUB (2026-07-05)",
+    isNew: true, hasScript: true,
+    script: `שקף 1 (פתיחה):
+3 דברים שאף אחד לא הכין אותך אליהם בחודש הראשון אחרי לידה.
+(ואת לא לבד באף אחד מהם)
+
+שקף 2:
+1. את יכולה לישון 3 שעות בפיזור על פני הלילה — ולהרגיש שעברת עליך משאית.
+זה לא "את לא מתמודדת טוב". זו עייפות אמיתית שהגוף לא בנוי לספוג לאורך זמן.
+
+שקף 3:
+2. את אוכלת עומדת, מהר, מעל הכיור — כי זה מה שיש.
+זה לא "אכילה רעה". זו הישרדות. יש לזה שם: אכילה כדי לשרוד, לא כדי ליהנות. שני הדברים לגיטימיים.
+
+שקף 4:
+3. את יכולה לבכות בלי סיבה ברורה, ואז לצחוק חמש דקות אחר כך.
+זו לא "חוסר יציבות". זו רכבת הורים הורמונלית אמיתית שעובר כמעט כל אמא — גם אם היא לא מדברת על זה.
+
+שקף 5 (CTA):
+אין ציפייה. יש רק המון נשים שעוברות בדיוק את זה, בשקט.
+שמרי את זה — או תייגי מישהי שצריכה לדעת שהיא לא לבד.`,
+    caption: `החודש הראשון אחרי לידה מגיע בלי מדריך.
+עייפות שאין לה שם, אכילה עומדת מול הכיור, ורכבת הורמונלית שמחליפה כיוון בלי התראה.
+אף אחד לא הכין אותך לזה — כי אף אחד לא מדבר על זה מספיק.
+זה לא כישלון שלך. זו המציאות של אחרי לידה, וזה מותר להיראות בדיוק ככה.
+את לא לבד בזה.
+שמרי את הפוסט הזה, או תייגי אמא טרייה שצריכה לשמוע את זה היום.`,
+    hashtags: "#אחרילידה #אמאטרייה #הנקה #דיאטנית #מעגלהפריון #postpartum #NBClinic" },
+
+  { id: 53, topic: "השקנו: CheckMom CLUB — מעגל אמהות אחרי לידה", format: "קרוסל", audience: "אחרי לידה", goal: "שיווק ישיר — השקה",
+    desc: "קרוסל הכרזה רשמית על השקת CheckMom CLUB: מה זה, למי מיועד, מה כלול (6-7 נשים, 6 מפגשים שבועיים, תפריט אישי, קבוצת וואטסאפ, גישה לאפליקציה), ומה ההבדל מליווי אישי. מטרה: להניע פנייה ישירה/הרשמה.",
+    cta: "כתבי לי CLUB בהודעה פרטית כדי להצטרף",
+    source: "רעיון קלוד — סבב 12.7–18.7.2026, פוקוס מילוי ליוויים + השקת CheckMom CLUB (2026-07-05)",
+    isNew: true, hasScript: true,
+    script: `שקף 1 (פתיחה):
+השקנו: CheckMom CLUB
+מעגל אמהות אחרי לידה — לא לבד, לא לפי מדריך גנרי.
+
+שקף 2:
+מה זה בעצם?
+קבוצה קטנה של 6-7 נשים אחרי לידה, שנפגשות יחד 6 מפגשים שבועיים — עם ליווי תזונתי אישי לצד תמיכה קבוצתית אמיתית.
+
+שקף 3:
+מה כלול:
+• תפריט אישי, מותאם לך ולשלב שאת בו
+• קבוצת וואטסאפ תומכת לאורך כל הדרך
+• גישה לאפליקציה עם כל הכלים
+• 6 מפגשים שבועיים עם נועם ועם נשים שמבינות בדיוק מה עובר עלייך
+
+שקף 4:
+למי זה מתאים?
+לאמא טרייה שרוצה כלים תזונתיים פרקטיים — אבל גם מקום שבו אפשר להגיד "אני עייפה ולא מסתדרת" בלי שיפוטיות, ולקבל מענה אמיתי.
+
+שקף 5 (CTA):
+המקומות מוגבלים ל-6-7 נשים בקבוצה.
+כתבי לי "CLUB" בהודעה פרטית ונדבר על ההצטרפות.`,
+    caption: `זה קרה — CheckMom CLUB יוצא לדרך.
+מעגל אמהות אחרי לידה, קבוצה קטנה של 6-7 נשים, עם ליווי תזונתי אישי ותמיכה קבוצתית אמיתית לאורך 6 מפגשים שבועיים.
+תפריט אישי, קבוצת וואטסאפ, גישה לאפליקציה — וזה בעיקר: מקום שבו מותר להגיד "אני עייפה" בלי אשמה, ולקבל כלים שעובדים גם ככה.
+את לא צריכה לעשות את זה לבד.
+המקומות מוגבלים — כתבי לי "CLUB" בהודעה פרטית ונדבר.`,
+    hashtags: "#CheckMomCLUB #אחרילידה #אמאטרייה #דיאטנית #מעגלהפריון #NBClinic" },
+
+  { id: 54, topic: "'משטר השבוע, קריסה בשבוע הבא' — זה לא כישלון שלך", format: "ריל", audience: "לפני היריון", goal: "ערך + ליד",
+    desc: "מסביר את לופ 'הכל או כלום' (משטר נוקשה -> קריסה -> בלגן -> אשמה) שנשים לפני היריון תקועות בו, ומציג את גישת ה-80/20 ככלי יציאה מעשי. מטרה: להוביל נשים שמזהות את עצמן בלופ לפנות ל-RISE Path.",
+    cta: "כתבי לי RISE בהודעה פרטית",
+    source: "רעיון קלוד — סבב 12.7–18.7.2026, פוקוס מילוי ליוויים + השקת CheckMom CLUB (2026-07-05)",
+    isNew: true, hasScript: true,
+    script: `HOOK (0–3 שניות):
+משטר קפדני יום ראשון. קריסה יום רביעי. בלגן עד סוף השבוע. ואז אשמה. ושוב מיום ראשון.
+מוכר?
+
+BODY (3–27 שניות):
+זה לא חוסר משמעת. זה לופ.
+ככל שהמשטר נוקשה יותר, כך הקריסה בלתי נמנעת יותר — כי הגוף והנפש לא בנויים להחזיק "הכל או כלום" לאורך זמן.
+היציאה מהלופ הזה היא לא עוד משטר חדש וקפדני יותר.
+זו גישה שנקראת 80/20 — לא פרפקציוניזם, אלא טיוב בחירות לאורך זמן. את לא צריכה להיות מושלמת בשביל שזה יעבוד.
+
+CLOSE + CTA (27–34 שניות):
+אם את מזהה את עצמך בלופ הזה — זה בדיוק המקום שבו RISE Path בנוי בשבילך.
+כתבי לי RISE בהודעה פרטית, ונדבר.`,
+    caption: `משטר. קריסה. בלגן. אשמה. ומיום ראשון — שוב מההתחלה.
+אם זה מוכר לך, זה לא כי חסר לך כוח רצון. זה כי הלופ הזה בנוי מראש לקרוס.
+את לא צריכה עוד דיאטה. את צריכה כלים — גישה כמו 80/20, שמאפשרת טיוב בחירות במקום פרפקציוניזם שנשבר בכל פעם מחדש.
+זה בדיוק מה ש-RISE Path נותן לך: יציאה אמיתית מהלופ, לפני שאת נכנסת להריון.
+כתבי לי RISE בהודעה פרטית ונדבר על זה.`,
+    hashtags: "#אכילהרגשית #לפניהריון #RISEPath #דיאטנית #מעגלהפריון #NBClinic" },
+
+  { id: 55, topic: "למה הקמתי את CheckMom CLUB — הסיפור מאחורי הקבוצה", format: "ריל", audience: "שניהם", goal: "קרבה + מאחורי הקלעים (בניית ציפייה ל-CheckMom CLUB)",
+    desc: "ריל טוקינג-הד אישי בו נועם מספרת מה הביא אותה להקים דווקא קבוצה (לא רק ליווי אישי) לאחרי לידה — כדי לחבר רגשית לפני/במקביל לפוסט השיווקי הישיר על ההשקה. לא מוכר ישירות, בונה אמון.",
+    cta: "יש לך שאלה על הקבוצה? כתבי לי בהודעה פרטית",
+    source: "רעיון קלוד — סבב 12.7–18.7.2026, פוקוס מילוי ליוויים + השקת CheckMom CLUB (2026-07-05)",
+    isNew: true, hasScript: true,
+    script: `HOOK (0–3 שניות):
+כל הליוויים שלי היו תמיד 1:1. אז למה פתאום קבוצה?
+
+BODY (3–29 שניות):
+כי ראיתי משהו שחוזר על עצמו שוב ושוב אצל אמהות טריות: הן מקבלות ממני את הכלים התזונתיים — אבל חסר להן עוד משהו. לדעת שיש עוד מישהי, באותו שלב בדיוק, שמרגישה בדיוק אותו דבר.
+ליווי אישי נותן עומק. קבוצה קטנה נותנת את התחושה של "אני לא היחידה שמרגישה ככה".
+CheckMom CLUB זה שני הדברים ביחד — כלים תזונתיים אישיים, בתוך מעגל של נשים שמבינות.
+
+CLOSE + CTA (29–35 שניות):
+זו לא עוד קבוצת תמיכה כללית. זו קבוצה עם ליווי תזונתי אמיתי, בקטנה, לשלב הכי לא פשוט.
+יש לך שאלה על זה? כתבי לי, אשמח לספר לך יותר.`,
+    caption: `כל הקריירה שלי בניתי סביב ליווי אישי, 1:1. אז למה דווקא עכשיו קבוצה?
+כי שוב ושוב פגשתי אמהות טריות שיש להן את הכלים — אבל חסר להן לדעת שהן לא היחידות שמרגישות ככה.
+CheckMom CLUB נולד מהצורך הזה: ליווי תזונתי אישי אמיתי, בתוך מעגל קטן של נשים שמבינות בדיוק מה עובר עלייך, בלי צורך להסביר.
+את לא לבד בזה — וזה בדיוק למה זה קיים.
+יש לך שאלה על הקבוצה? כתבי לי בהודעה פרטית, אשמח לספר לך יותר.`,
+    hashtags: "#CheckMomCLUB #אחרילידה #מאחוריהקלעים #דיאטנית #מעגלהפריון #NBClinic" },
+
+  { id: 56, topic: "בשליש הראשון 'בור בבטן' — בשליש השלישי בקושי אוכלת. למה?", format: "ריל", audience: "הריון", goal: "ערך + חשיפה",
+    desc: "מסביר את הניגוד בין תיאבון בשליש הראשון (רעב עמוק/'בור בבטן', קשור לעלייה בקצב חילוף החומרים ולתנודות הורמונליות) לבין שובע מהיר בשליש השלישי (הרחם הגדל לוחץ פיזית על הקיבה + עיכול איטי יותר). מטרה: לתת לגיטימציה לשינויים בתיאבון לאורך ההריון ולהוריד שיפוטיות עצמית.",
+    cta: "שמרי את זה / הורידי MomSafe",
+    source: "רעיון קלוד — בקשה ספציפית של נועם (2026-07-05)",
+    isNew: true, hasScript: true,
+    caution: "לנסח בזהירות: הרעב הקיצוני בשליש הראשון קשור ל'שילוב אפשרי' של עלייה בקצב חילוף החומרים ותנודות הורמוניות/סוכר — לא לקבוע אותו כעובדה חד-משמעית יחידה, וגם לציין ששליש ראשון מלווה אצל חלק מהנשים דווקא בבחילות שמפחיתות תיאבון (לא כל הריון זהה). את השובע המהיר בשליש השלישי אפשר לנסח בביטחון רב יותר — לחץ פיזי של הרחם הגדל על הקיבה הוא הסבר אנטומי מבוסס, אך שווה להוסיף שגם האטת עיכול הורמונלית תורמת לכך.",
+    script: `HOOK (0–3 שניות):
+בשליש הראשון — בור בבטן שלא נגמר. בשליש השלישי — את בקושי גומרת חצי צלחת. מה קרה שם?
+
+BODY (3–28 שניות):
+בשליש הראשון הגוף שלך עסוק ביצירת תשתית שלמה — שליה, איברים, מערכות — וזה קשור, בין השאר, לעלייה בקצב חילוף החומרים ולתנודות ברמות הסוכר וההורמונים. אצל חלק מהנשים זה מתבטא ברעב עמוק שקשה להשביע.
+בשליש השלישי הסיפור מתהפך: הרחם גדל ומתחיל פיזית ללחוץ על הקיבה שלך — פשוט נשאר לה פחות מקום. ביחד עם האטה בעיכול, זה אומר ששובעת מהר, גם מכמות קטנה.
+
+CLOSE + CTA (28–35 שניות):
+זה לא "אכלת יותר מדי" בהתחלה, וזה לא "משהו לא בסדר" בסוף.
+זה הגוף שלך שמשנה צורה ומקום בזמן אמת — ומתאים לזה גם את התיאבון.
+שמרי את זה, ובמדריך MomSafe תמצאי איך להתאים את גודל וקצב הארוחות לכל שליש בהתאם.`,
+    caption: `שליש ראשון: רעב שלא נגמר. שליש שלישי: בקושי גומרת חצי צלחת.
+שני הקצוות האלה הם לא סתירה — הם אותו גוף, בשני שלבים שונים לגמרי.
+בהתחלה הוא בונה תשתית שלמה בשבילכן השתיים, וזה יכול להתבטא ברעב עמוק.
+בסוף, הרחם הגדל פשוט משאיר פחות מקום לקיבה — אז שובעת מהר, גם מכמות קטנה.
+הגוף שלך לא הבעיה. המידע שקיבלת הוא הבעיה.
+שמרי את זה, ובמדריך MomSafe יש התאמות פרקטיות לכל שליש.`,
+    hashtags: "#תזונהבהריון #שליששלישי #שלישראשון #דיאטנית #מעגלהפריון #pregnancynutrition #NBClinic" },
 ];
 
 const LIBRARY_POSTS = CALENDAR_POSTS.map(p => Object.assign({}, p, { persona: p.audience, priority: p.priority || 'high' })).concat(ORGANIC_POOL)
@@ -1295,6 +1525,84 @@ function transferIdeaToOrganic(id) {
   renderOrganicTab();
   renderScriptsLibrary();
   renderStats();
+}
+
+/* ---------- פוסטים אורגניים: מחיקה ידנית + הוספה ידנית ---------- */
+const LS_DELETED_LIBRARY = 'nb_deleted_library_posts';
+let deletedLibraryIds = loadIdSet(LS_DELETED_LIBRARY);
+deletedLibraryIds.forEach(id => {
+  const idx = LIBRARY_POSTS.findIndex(p => p.id === id);
+  if (idx !== -1) LIBRARY_POSTS.splice(idx, 1);
+});
+function deleteLibraryPost(id) {
+  const idx = LIBRARY_POSTS.findIndex(p => p.id === id);
+  if (idx !== -1) LIBRARY_POSTS.splice(idx, 1);
+  if (!deletedLibraryIds.includes(id)) {
+    deletedLibraryIds.push(id);
+    saveIdSet(LS_DELETED_LIBRARY, deletedLibraryIds);
+  }
+  renderStats();
+  renderCalendar();
+  renderTasksTab();
+  renderScriptsLibrary();
+  renderOrganicTab();
+}
+
+const LS_MANUAL_LIBRARY = 'nb_manual_organic_posts';
+function loadManualLibraryPosts() { try { return JSON.parse(localStorage.getItem(LS_MANUAL_LIBRARY)) || []; } catch (e) { return []; } }
+function saveManualLibraryPosts(arr) { localStorage.setItem(LS_MANUAL_LIBRARY, JSON.stringify(arr)); }
+let manualLibraryPosts = loadManualLibraryPosts();
+// מונה ID נפרד, בבסיס 90000, לפוסטים שנוספו ידנית מהדשבורד — כדי שלעולם לא יתנגש
+// עם ה-ID-ים שהסקיל /nb-content-plan מייצר לתוך CLAUDE_IDEAS (ראו dashboard-schema.md).
+let manualLibraryIdCounter = manualLibraryPosts.reduce((m, p) => Math.max(m, p.id), 90000) + 1;
+manualLibraryPosts.forEach(p => {
+  if (!deletedLibraryIds.includes(p.id) && !LIBRARY_POSTS.some(x => x.id === p.id)) {
+    LIBRARY_POSTS.push(p);
+    ALL_EDITABLE_POSTS.push(p);
+  }
+});
+function updateManualPostSubcatField() {
+  const catEl = document.getElementById('manual-post-category');
+  const wrap = document.getElementById('manual-post-subcat-wrap');
+  const sel = document.getElementById('manual-post-subcat');
+  if (!catEl || !wrap || !sel) return;
+  const groups = SUBGROUPS_BY_CATEGORY[catEl.value];
+  if (groups) {
+    wrap.style.display = '';
+    sel.innerHTML = groups.map(g => `<option value="${g.key}">${g.label}</option>`).join('');
+  } else {
+    wrap.style.display = 'none';
+    sel.innerHTML = '';
+  }
+}
+function addManualLibraryPost() {
+  const topicEl = document.getElementById('manual-post-topic');
+  const topic = topicEl.value.trim();
+  if (!topic) return;
+  const format = document.getElementById('manual-post-format').value;
+  const audience = document.getElementById('manual-post-audience').value;
+  const category = document.getElementById('manual-post-category').value;
+  const subcatEl = document.getElementById('manual-post-subcat');
+  const subcategory = SUBGROUPS_BY_CATEGORY[category] ? subcatEl.value : null;
+  const goalEl = document.getElementById('manual-post-goal');
+  const goal = goalEl.value.trim() || null;
+  const post = {
+    id: manualLibraryIdCounter++, topic, format, audience, persona: audience, priority: 'medium',
+    goal, desc: 'פוסט שנוסף ידנית — לחצי על הכרטיס ואז על "ערוך" כדי להוסיף תקציר/סקריפט/קפשן.',
+    cta: '—', source: 'נוסף ידנית על ידי נועם בדשבורד', isNew: true, hasScript: false,
+    script: '', caption: '', hashtags: null, category, subcategory,
+  };
+  manualLibraryPosts.push(post);
+  saveManualLibraryPosts(manualLibraryPosts);
+  LIBRARY_POSTS.push(post);
+  ALL_EDITABLE_POSTS.push(post);
+  topicEl.value = '';
+  goalEl.value = '';
+  renderStats();
+  renderCalendar();
+  renderTasksTab();
+  renderScriptsLibrary();
+  renderOrganicTab();
 }
 
 // נקודות הכניסה לתנועה — הקשר עסקי, לא לוח יומן. מוצג כתרשים זרימה בטאב הפאנלים.
@@ -1380,7 +1688,10 @@ function postCardHtml(p, opts) {
         ${p.caution ? '<span class="tag tag-caution">⚠️ דורש בדיקה</span>' : ''}
       </div>
     </div>
-    <div class="post-arrow">←</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+      ${opts.deletable ? `<span class="task-del" onclick="event.stopPropagation();deleteLibraryPost(${p.id})" title="מחקי פוסט מהספרייה">✕</span>` : ''}
+      <div class="post-arrow">←</div>
+    </div>
   </div>`;
 }
 
@@ -1707,21 +2018,38 @@ function renderClaudeIdeas() {
 
 /* ---------- TAB 5: פוסטים אורגניים לפי תיקיית מטרה ---------- */
 function renderOrganicTab() {
+  updateManualPostSubcatField();
   document.getElementById('organic-cross-note').innerHTML =
-    `💡 כל הפוסטים האורגניים במקום אחד, מסודרים לפי המטרה של כל תוכן — כולל אלה שכבר משובצים ביומן בטאב "אסטרטגיית תוכן". אפשר לשבץ/לשבץ מחדש אותם בלוח השנה בכל רגע. הפרסונה (קהל היעד) עדיין מוצגת כתגית על כל כרטיס.`;
+    `💡 כל הפוסטים האורגניים במקום אחד, מסודרים לפי המטרה של כל תוכן — כולל אלה שכבר משובצים ביומן בטאב "אסטרטגיית תוכן". בתוך "קידום מכירה" ו"ליד מגנט" יש גם חלוקה פנימית לפי המוצר/המדריך הספציפי. אפשר לשבץ/לשבץ מחדש אותם בלוח השנה בכל רגע, למחוק פוסט שלא מתאים (✕ על הכרטיס), או להוסיף פוסט חדש ידנית מהטופס למעלה. הפרסונה (קהל היעד) עדיין מוצגת כתגית על כל כרטיס.`;
   const priorityOrder = { high: 0, medium: 1, low: 2 };
+  const bySubPriority = (a, b) => (priorityOrder[a.priority] ?? 9) - (priorityOrder[b.priority] ?? 9);
   let html = '';
   CATEGORIES.forEach(cat => {
-    const items = LIBRARY_POSTS.filter(p => p.category === cat.key)
-      .sort((a, b) => (priorityOrder[a.priority] ?? 9) - (priorityOrder[b.priority] ?? 9));
+    const items = LIBRARY_POSTS.filter(p => p.category === cat.key).sort(bySubPriority);
     if (items.length === 0) return;
     html += `<div class="persona-section">
       <div class="persona-head"><span class="persona-dot" style="background:${cat.color}"></span><span class="persona-title">${cat.label}</span><span class="badge-count">${items.length} פוסטים</span></div>
-      <div class="persona-desc">${cat.desc}</div>
-      <div class="posts-grid">${items.map(p => postCardHtml(p, { byCategory: true })).join('')}</div>
-    </div>`;
+      <div class="persona-desc">${cat.desc}</div>`;
+    const subgroups = SUBGROUPS_BY_CATEGORY[cat.key];
+    if (subgroups) {
+      const grouped = new Set();
+      subgroups.forEach(g => {
+        const groupItems = items.filter(p => subcategoryOf(p) === g.key);
+        if (!groupItems.length) return;
+        groupItems.forEach(p => grouped.add(p.id));
+        html += `<div style="font-size:13px;font-weight:700;color:var(--text-secondary);margin:14px 0 8px;display:flex;align-items:center;gap:8px;">
+          <span>${g.label}</span><span class="badge-count">${groupItems.length}</span>
+        </div>
+        <div class="posts-grid">${groupItems.map(p => postCardHtml(p, { byCategory: true, deletable: true })).join('')}</div>`;
+      });
+      const rest = items.filter(p => !grouped.has(p.id));
+      if (rest.length) html += `<div class="posts-grid">${rest.map(p => postCardHtml(p, { byCategory: true, deletable: true })).join('')}</div>`;
+    } else {
+      html += `<div class="posts-grid">${items.map(p => postCardHtml(p, { byCategory: true, deletable: true })).join('')}</div>`;
+    }
+    html += `</div>`;
   });
-  document.getElementById('organic-root').innerHTML = html;
+  document.getElementById('organic-root').innerHTML = html || `<div class="empty-slot">אין עדיין פוסטים אורגניים בספרייה.</div>`;
 }
 
 /* ---------- MODAL ---------- */
