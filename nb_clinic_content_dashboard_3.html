@@ -127,6 +127,9 @@
   .post-arrow { font-size: 14px; color: var(--text-muted); flex-shrink: 0; padding-top: 2px; }
   .empty-slot { font-size: 13px; color: var(--text-muted); padding: 10px 4px; }
 
+  .post-card.idea-card { flex-direction: column; align-items: stretch; cursor: default; }
+  .claude-idea-actions { display: flex; gap: 8px; justify-content: flex-end; padding-top: 10px; margin-top: 10px; border-top: 1px dashed var(--border); }
+
   /* entry panels (tab 1) */
   .entry-panels-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 2rem; align-items: start; }
   .entry-panel-card { background: var(--bg-card); border: 1px solid var(--border); border-top: 4px solid var(--purple); border-radius: 14px; padding: 18px 20px; }
@@ -308,6 +311,11 @@
     <div id="maya-ofri-root"></div>
     <div class="controls-row" id="lib-filters"></div>
     <div id="scripts-lib-root"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-claude-ideas">
+    <div class="section-note">רעיונות חדשים שקלוד מוסיפה כשמריצים את /nb-content-plan. אפשר לפתוח (לחיצה על הכרטיס) כדי לערוך כל פרט, למחוק רעיון שלא רלוונטי, או להעביר לספריית "פוסטים אורגניים" — שם הוא ישובץ אוטומטית לתיקייה המתאימה (קידום מכירה / ליד מגנט / ידע מקצועי / קהילה) לפי אופי הפוסט.</div>
+    <div id="claude-ideas-root"></div>
   </div>
 
   <div class="tab-panel" id="tab-organic">
@@ -1231,10 +1239,63 @@ const CATEGORY_BY_ID = {
 };
 function categoryOf(id) { return CATEGORY_BY_ID[id] || 'education'; }
 function categoryClass(key) { return 'category-' + key; }
+// inferCategory: סיווג אוטומטי (לא ידני) לפוסטים חדשים שמגיעים מ"רעיונות מקלוד" בהעברה
+// לפוסטים אורגניים — נבדק לפי מילות מפתח ב-goal/cta/desc, לא לפי id קבוע מראש.
+function inferCategory(p) {
+  const text = [p.goal, p.cta, p.desc].filter(Boolean).join(' ');
+  if (/RISE|Glow|CLUB|מכירה|ליווי|רכישה|לינק ל/.test(text)) return 'sale';
+  if (/MomSafe|MomRelief|חינם|הורידי|מדריך חינמי|ליד מגנט/.test(text)) return 'leadmagnet';
+  if (/קהילה|אמפתיה|שתפי|שאלי בתגובות/.test(text)) return 'community';
+  return 'education';
+}
+
+// CLAUDE_IDEAS: כאן הסקיל /nb-content-plan מוסיף כל רעיון חדש שהוא מייצר (ריצה אחר ריצה,
+// בלי למחוק מה שכבר שם). מוצג בטאב "🤖 רעיונות מקלוד" — משם אפשר לערוך/למחוק/להעביר
+// לספריית "פוסטים אורגניים" (שם הוא ישובץ אוטומטית לתיקייה לפי inferCategory).
+const CLAUDE_IDEAS = [
+];
 
 const LIBRARY_POSTS = CALENDAR_POSTS.map(p => Object.assign({}, p, { persona: p.audience, priority: p.priority || 'high' })).concat(ORGANIC_POOL)
   .map(p => Object.assign(p, { category: categoryOf(p.id) }));
-const ALL_EDITABLE_POSTS = LIBRARY_POSTS.concat(MAYA_OFRI_DAY1);
+const ALL_EDITABLE_POSTS = LIBRARY_POSTS.concat(MAYA_OFRI_DAY1).concat(CLAUDE_IDEAS);
+
+/* ---------- רעיונות מקלוד: מחיקה / העברה לפוסטים אורגניים ---------- */
+const LS_DELETED_IDEAS = 'nb_deleted_claude_ideas';
+const LS_TRANSFERRED_IDEAS = 'nb_transferred_claude_ideas';
+function loadIdSet(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; } }
+function saveIdSet(key, arr) { localStorage.setItem(key, JSON.stringify(arr)); }
+let deletedIdeaIds = loadIdSet(LS_DELETED_IDEAS);
+let transferredIdeaIds = loadIdSet(LS_TRANSFERRED_IDEAS);
+// פוסטים שכבר הועברו בעבר (מריצה קודמת של הדשבורד) — מוזרקים ל-LIBRARY_POSTS/ALL_EDITABLE_POSTS
+// כבר בטעינה, כדי שיופיעו בפוסטים אורגניים ובכל מקום אחר גם אחרי רענון הדף.
+CLAUDE_IDEAS.forEach(idea => {
+  if (transferredIdeaIds.includes(idea.id) && !LIBRARY_POSTS.some(x => x.id === idea.id)) {
+    idea.persona = idea.audience;
+    idea.priority = idea.priority || 'medium';
+    idea.category = inferCategory(idea);
+    LIBRARY_POSTS.push(idea);
+  }
+});
+
+function deleteClaudeIdea(id) {
+  deletedIdeaIds.push(id);
+  saveIdSet(LS_DELETED_IDEAS, deletedIdeaIds);
+  renderClaudeIdeas();
+}
+function transferIdeaToOrganic(id) {
+  const idea = CLAUDE_IDEAS.find(x => x.id === id);
+  if (!idea) return;
+  idea.persona = idea.audience;
+  idea.priority = idea.priority || 'medium';
+  idea.category = inferCategory(idea);
+  if (!LIBRARY_POSTS.some(x => x.id === id)) LIBRARY_POSTS.push(idea);
+  transferredIdeaIds.push(id);
+  saveIdSet(LS_TRANSFERRED_IDEAS, transferredIdeaIds);
+  renderClaudeIdeas();
+  renderOrganicTab();
+  renderScriptsLibrary();
+  renderStats();
+}
 
 // נקודות הכניסה לתנועה — הקשר עסקי, לא לוח יומן. מוצג כתרשים זרימה בטאב הפאנלים.
 // כל panel: audience (קהל יעד), steps (השלבים שהלקוחה עוברת בפועל, מהתחלה עד הסגירה — הצעד האחרון הוא ה"outcome").
@@ -1329,6 +1390,7 @@ const TABS = [
   { id: 'tab-content', label: '🗓️ אסטרטגיית תוכן' },
   { id: 'tab-tasks', label: '✅ משימות לביצוע' },
   { id: 'tab-scripts', label: '🎬 תסריטים לצילום' },
+  { id: 'tab-claude-ideas', label: '🤖 רעיונות מקלוד' },
   { id: 'tab-organic', label: '🌱 פוסטים אורגניים' },
 ];
 function buildTabsNav() {
@@ -1616,6 +1678,33 @@ function renderScriptsLibrary() {
 }
 function setLibFilter(f) { activeLibFilter.format = f; renderScriptsLibrary(); }
 
+/* ---------- רעיונות מקלוד ---------- */
+function claudeIdeaCardHtml(p) {
+  const fc = fmtClass(p.format);
+  return `<div class="post-card fmt-${fc} idea-card">
+    <div class="post-main" style="cursor:pointer;" onclick="openModal(${p.id})">
+      <div class="post-topic">${p.topic}</div>
+      <div class="post-tags">
+        <span class="tag tag-format-${fc}">${p.format}</span>
+        <span class="tag tag-audience">${p.audience}</span>
+        ${p.goal ? `<span class="tag tag-goal">${p.goal}</span>` : ''}
+        ${p.hasScript ? '<span class="tag tag-goal">📝 סקריפט מוכן</span>' : ''}
+      </div>
+    </div>
+    <div class="claude-idea-actions">
+      <button class="copy-btn" onclick="transferIdeaToOrganic(${p.id})">➡️ העברה לפוסטים אורגניים</button>
+      <span class="task-del" onclick="deleteClaudeIdea(${p.id})" title="מחקי רעיון">✕</span>
+    </div>
+  </div>`;
+}
+function renderClaudeIdeas() {
+  const visible = CLAUDE_IDEAS.filter(p => !deletedIdeaIds.includes(p.id) && !transferredIdeaIds.includes(p.id));
+  const root = document.getElementById('claude-ideas-root');
+  root.innerHTML = visible.length
+    ? `<div class="section-title">🤖 רעיונות ממתינים לבדיקה <span class="badge-count">${visible.length}</span></div><div class="posts-grid">${visible.map(claudeIdeaCardHtml).join('')}</div>`
+    : `<div class="empty-slot">אין כרגע רעיונות חדשים. הריצי /nb-content-plan כדי לקבל סט רעיונות חדש.</div>`;
+}
+
 /* ---------- TAB 5: פוסטים אורגניים לפי תיקיית מטרה ---------- */
 function renderOrganicTab() {
   document.getElementById('organic-cross-note').innerHTML =
@@ -1725,6 +1814,7 @@ function saveModalEdit(id) {
   renderModalView(p);
   renderScriptsLibrary();
   renderMayaOfriDay1();
+  renderClaudeIdeas();
   renderOrganicTab();
   renderCalendar();
   renderTasksTab();
@@ -1752,6 +1842,7 @@ renderCalendar();
 renderTasksTab();
 renderMayaOfriDay1();
 renderScriptsLibrary();
+renderClaudeIdeas();
 renderOrganicTab();
 </script>
 
