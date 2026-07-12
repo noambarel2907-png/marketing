@@ -213,6 +213,14 @@
   .task-form button:hover { background: var(--purple-dark); }
   .task-del { cursor: pointer; color: var(--text-muted); font-size: 15px; flex-shrink: 0; padding-top: 2px; }
   .task-del:hover { color: #A32D2D; }
+  .task-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; padding-top: 2px; }
+  .task-icon-btn { cursor: pointer; font-size: 14px; opacity: .7; }
+  .task-icon-btn:hover { opacity: 1; }
+  .task-notes-area { width: 100%; margin-top: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 12.5px; resize: vertical; min-height: 50px; box-sizing: border-box; }
+  .task-row.editing { align-items: stretch; }
+  .task-day-group-title { font-size: 13px; font-weight: 700; margin: 1.1rem 0 .5rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+  .task-day-group-title:first-child { margin-top: 0; }
+  .cal-chip.custom { background: var(--gray-dark); border: 1px dashed rgba(255,255,255,.55); }
 
   /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(40,38,32,.45); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; }
@@ -288,7 +296,7 @@
         <button class="cal-nav-btn" onclick="shiftMonth(1)">‹</button>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
-      <p class="muted" style="font-size:12px;color:var(--text-muted);margin-top:10px;">לחצי על תאריך כדי לשבץ אליו פוסט מתוך "פוסטים אורגניים", או להסיר שיבוץ קיים.</p>
+      <p class="muted" style="font-size:12px;color:var(--text-muted);margin-top:10px;">לחצי על תאריך כדי לשבץ אליו פוסט מתוך "פוסטים אורגניים", להוסיף פריט חופשי משלך שלא קשור לרשימת הפוסטים, או להסיר שיבוץ קיים.</p>
     </div>
   </div>
 
@@ -2107,6 +2115,7 @@ const ENTRY_PANELS = [
 const fmtClass = (f) => f.replace(/\s/g, '-');
 
 function escapeForJs(str) { return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$'); }
+function escHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
 function getStore(key) { return localStorage.getItem(key) === '1'; }
 function setStore(key, val) { localStorage.setItem(key, val ? '1' : '0'); }
@@ -2239,6 +2248,27 @@ function initCalendar() {
 let calendarData = initCalendar();
 let calViewYear = 2026, calViewMonth = 7;
 
+const LS_CAL_CUSTOM = 'nb_calendar_custom';
+function loadCalCustom() { try { return JSON.parse(localStorage.getItem(LS_CAL_CUSTOM)) || {}; } catch (e) { return {}; } }
+function saveCalCustom(c) { localStorage.setItem(LS_CAL_CUSTOM, JSON.stringify(c)); }
+let calendarCustom = loadCalCustom();
+function addCustomCalItem(iso) {
+  const input = document.getElementById('day-custom-input');
+  const text = input.value.trim();
+  if (!text) return;
+  calendarCustom[iso] = calendarCustom[iso] || [];
+  calendarCustom[iso].push({ id: 'c' + Date.now() + Math.floor(Math.random() * 1000), text });
+  saveCalCustom(calendarCustom);
+  renderCalendar();
+  openDayModal(iso);
+}
+function removeCustomCalItem(iso, id) {
+  calendarCustom[iso] = (calendarCustom[iso] || []).filter(c => c.id !== id);
+  saveCalCustom(calendarCustom);
+  renderCalendar();
+  if (document.getElementById('dayModal').classList.contains('open')) openDayModal(iso);
+}
+
 function daysInMonth(y, m) { return new Date(y, m, 0).getDate(); }
 function fmtDateHeShort(iso) { const [y, m, d] = iso.split('-'); return `${d}.${m}.${y.slice(2)}`; }
 
@@ -2261,9 +2291,12 @@ function renderCalendar() {
       if (!p) return '';
       return `<div class="cal-chip fmt-${fmtClass(p.format)}" onclick="event.stopPropagation();openModal(${p.id})">${p.topic}</div>`;
     }).join('');
+    const customChips = (calendarCustom[iso] || []).map(c =>
+      `<div class="cal-chip custom" onclick="event.stopPropagation();openDayModal('${iso}')">📌 ${escHtml(c.text)}</div>`
+    ).join('');
     html += `<div class="cal-day ${iso === todayISO ? 'today' : ''}" onclick="openDayModal('${iso}')">
       <div class="cal-daynum">${day}</div>
-      ${chips}
+      ${chips}${customChips}
     </div>`;
   }
   grid.innerHTML = html;
@@ -2276,23 +2309,33 @@ function shiftMonth(delta) {
 }
 function openDayModal(iso) {
   const assigned = calendarData[iso] || [];
+  const customItems = calendarCustom[iso] || [];
   const dateObj = new Date(iso + 'T00:00:00');
   const label = dateObj.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' });
   const assignedHtml = assigned.length ? assigned.map(pid => {
     const p = LIBRARY_POSTS.find(x => x.id === pid);
     if (!p) return '';
     return `<div class="task-row"><span class="tag tag-format-${fmtClass(p.format)}">${p.format}</span><span class="task-label" style="flex:1;margin:0;">${p.topic}</span><span class="task-del" onclick="unassignPost('${iso}',${pid})">✕</span></div>`;
-  }).join('') : `<div class="empty-slot">אין פוסטים משובצים ליום זה</div>`;
+  }).join('') : '';
+  const customHtml = customItems.map(c =>
+    `<div class="task-row"><span class="tag" style="background:var(--bg-soft);color:var(--text-secondary);">📌 חופשי</span><span class="task-label" style="flex:1;margin:0;">${escHtml(c.text)}</span><span class="task-del" onclick="removeCustomCalItem('${iso}','${c.id}')">✕</span></div>`
+  ).join('');
+  const combinedHtml = (assignedHtml + customHtml) || `<div class="empty-slot">אין עדיין כלום משובץ ליום זה</div>`;
   const available = LIBRARY_POSTS.filter(p => !assigned.includes(p.id));
   const optionsHtml = available.map(p => `<option value="${p.id}">${p.topic}</option>`).join('');
   document.getElementById('day-modal-content').innerHTML = `
-    <div class="modal-title">שיבוץ פוסטים — ${label}</div>
-    <div class="modal-section-label">פוסטים משובצים</div>
-    <div style="margin-bottom:16px;">${assignedHtml}</div>
+    <div class="modal-title">שיבוץ — ${label}</div>
+    <div class="modal-section-label">משובץ ליום זה</div>
+    <div style="margin-bottom:16px;">${combinedHtml}</div>
     <div class="modal-section-label">הוסיפי פוסט מתוך "פוסטים אורגניים"</div>
-    <div style="display:flex; gap:8px;">
+    <div style="display:flex; gap:8px; margin-bottom:16px;">
       <select id="day-post-select" style="flex:1; padding:8px; border:1px solid var(--border); border-radius:8px; font-family:inherit;">${optionsHtml || '<option value="">אין עוד פוסטים זמינים בספרייה</option>'}</select>
       <button onclick="assignPost('${iso}')" style="background:var(--purple);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;font-family:inherit;">שבצי</button>
+    </div>
+    <div class="modal-section-label">או הוסיפי פריט חופשי (לא מתוך רשימת הפוסטים)</div>
+    <div style="display:flex; gap:8px;">
+      <input type="text" id="day-custom-input" placeholder="למשל: לצלם סטורי מאחורי הקלעים..." style="flex:1; padding:8px; border:1px solid var(--border); border-radius:8px; font-family:inherit;">
+      <button onclick="addCustomCalItem('${iso}')" style="background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;font-family:inherit;">הוסיפי</button>
     </div>
   `;
   document.getElementById('dayModal').classList.add('open');
@@ -2380,7 +2423,7 @@ function addManualTask() {
   const deadlineEl = document.getElementById('task-deadline-input');
   const title = titleEl.value.trim();
   if (!title) return;
-  manualTasks.push({ id: manualTaskIdCounter++, title, urgency: urgencyEl.value, deadline: deadlineEl.value || null, done: false });
+  manualTasks.push({ id: manualTaskIdCounter++, title, urgency: urgencyEl.value, deadline: deadlineEl.value || null, done: false, notes: '' });
   saveManualTasks(manualTasks);
   titleEl.value = ''; deadlineEl.value = '';
   renderTasksTab();
@@ -2397,17 +2440,71 @@ function deleteManualTask(id) {
   saveManualTasks(manualTasks);
   renderTasksTab();
 }
+/* עריכת משימה קיימת (כותרת/דחיפות/דדליין) */
+let editingTaskId = null;
+function startEditTask(id) { editingTaskId = id; renderTasksTab(); }
+function cancelEditTask() { editingTaskId = null; renderTasksTab(); }
+function saveEditTask(id) {
+  const t = manualTasks.find(x => x.id === id);
+  if (!t) return;
+  const title = document.getElementById('edit-title-' + id).value.trim();
+  if (!title) return;
+  t.title = title;
+  t.urgency = document.getElementById('edit-urgency-' + id).value;
+  t.deadline = document.getElementById('edit-deadline-' + id).value || null;
+  saveManualTasks(manualTasks);
+  editingTaskId = null;
+  renderTasksTab();
+}
+/* הערות מורחבות למשימה */
+let expandedNotesTaskIds = new Set();
+function toggleTaskNotes(id) {
+  if (expandedNotesTaskIds.has(id)) expandedNotesTaskIds.delete(id); else expandedNotesTaskIds.add(id);
+  renderTasksTab();
+}
+function saveTaskNotes(id, value) {
+  const t = manualTasks.find(x => x.id === id);
+  if (!t) return;
+  t.notes = value;
+  saveManualTasks(manualTasks);
+}
 function manualTaskRowHtml(t) {
+  if (editingTaskId === t.id) {
+    return `<div class="task-row editing">
+      <div class="task-body" style="cursor:default;">
+        <div class="task-form" style="margin-bottom:8px;">
+          <input type="text" id="edit-title-${t.id}" value="${escHtml(t.title)}">
+          <select id="edit-urgency-${t.id}">
+            <option value="גבוה" ${t.urgency === 'גבוה' ? 'selected' : ''}>דחיפות: גבוה</option>
+            <option value="בינוני" ${t.urgency === 'בינוני' ? 'selected' : ''}>דחיפות: בינוני</option>
+            <option value="נמוך" ${t.urgency === 'נמוך' ? 'selected' : ''}>דחיפות: נמוך</option>
+          </select>
+          <input type="date" id="edit-deadline-${t.id}" value="${t.deadline || ''}">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="saveEditTask(${t.id})" style="background:var(--purple);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12.5px;cursor:pointer;font-weight:600;font-family:inherit;">שמרי</button>
+          <button onclick="cancelEditTask()" style="background:var(--bg-soft);color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12.5px;cursor:pointer;font-family:inherit;">בטלי</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  const notesOpen = expandedNotesTaskIds.has(t.id);
+  const hasNotes = !!(t.notes && t.notes.trim());
   return `<div class="task-row ${t.done ? 'done' : ''}">
     <input type="checkbox" class="task-check" ${t.done ? 'checked' : ''} onchange="toggleManualTaskDone(${t.id})">
-    <div class="task-body">
-      <div class="task-label">${t.title}</div>
+    <div class="task-body" style="cursor:default;">
+      <div class="task-label">${escHtml(t.title)}</div>
       <div class="task-meta">
         <span class="tag tag-priority-${urgencyClass(t.urgency)}">דחיפות: ${t.urgency}</span>
         ${t.deadline ? deadlineChip(t.deadline) : '<span class="deadline-chip none">ללא דדליין</span>'}
       </div>
+      ${notesOpen ? `<textarea class="task-notes-area" placeholder="הערות למשימה הזו..." oninput="saveTaskNotes(${t.id}, this.value)">${escHtml(t.notes || '')}</textarea>` : ''}
     </div>
-    <span class="task-del" onclick="deleteManualTask(${t.id})" title="מחקי משימה">✕</span>
+    <div class="task-actions">
+      <span class="task-icon-btn" onclick="toggleTaskNotes(${t.id})" title="הערות">${hasNotes ? '🗒️•' : '🗒️'}</span>
+      <span class="task-icon-btn" onclick="startEditTask(${t.id})" title="עריכה">✏️</span>
+      <span class="task-del" onclick="deleteManualTask(${t.id})" title="מחקי משימה">✕</span>
+    </div>
   </div>`;
 }
 
@@ -2431,14 +2528,27 @@ function renderTasksTab() {
     taskRowHtml(t.id, t.label, `<span class="deadline-chip none">ללא תאריך קבוע</span>`, null, `deleteOpsTask('${t.id}')`)
   ).join('') : `<div class="empty-slot">אין משימות תפעול כרגע.</div>`;
   html += `<div class="task-group-title">📝 משימות אישיות</div>`;
-  const sortedManual = [...manualTasks].sort((a, b) => {
-    if (a.done !== b.done) return a.done ? 1 : -1;
-    if (a.deadline && b.deadline) return a.deadline.localeCompare(b.deadline);
-    if (a.deadline) return -1;
-    if (b.deadline) return 1;
-    return 0;
-  });
-  html += sortedManual.length ? sortedManual.map(manualTaskRowHtml).join('') : `<div class="empty-slot">אין עדיין משימות אישיות. הוסיפי אחת למעלה.</div>`;
+  if (!manualTasks.length) {
+    html += `<div class="empty-slot">אין עדיין משימות אישיות. הוסיפי אחת למעלה.</div>`;
+  } else {
+    const byDaySort = (a, b) => (a.done === b.done) ? 0 : (a.done ? 1 : -1);
+    const withDate = manualTasks.filter(t => t.deadline);
+    const noDate = manualTasks.filter(t => !t.deadline);
+    const groups = {};
+    withDate.forEach(t => { (groups[t.deadline] = groups[t.deadline] || []).push(t); });
+    const sortedDates = Object.keys(groups).sort();
+    sortedDates.forEach(dateStr => {
+      const dateObj = new Date(dateStr + 'T00:00:00');
+      const weekdayLabel = dateObj.toLocaleDateString('he-IL', { weekday: 'long' });
+      const dd = String(dateObj.getDate()).padStart(2, '0'), mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+      html += `<div class="task-day-group-title">🗓️ ${weekdayLabel} — ${dd}.${mm}</div>`;
+      html += groups[dateStr].sort(byDaySort).map(manualTaskRowHtml).join('');
+    });
+    if (noDate.length) {
+      html += `<div class="task-day-group-title">📌 ללא תאריך קבוע</div>`;
+      html += noDate.sort(byDaySort).map(manualTaskRowHtml).join('');
+    }
+  }
   document.getElementById('tasks-root').innerHTML = html;
   renderTaskProgress();
 }
